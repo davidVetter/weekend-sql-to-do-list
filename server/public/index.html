@@ -10,6 +10,48 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <header>
+        <h1>Task List</h1>
+    </header>
+    <main id="mainSection">
+        <h2 id="addEditHeading">Create New Task</h2>
+        <div id="addFormDiv">
+            <div id="addInputDiv">
+                Name: <input id="taskNameIn" type="text" placeholder="Task Name">
+                Description: <input id="taskDescriptionIn" type="text" placeholder="Description of task">
+                Due Date: <input id="dueDateIn" type="date">
+            </div>
+            <button id="addBtn">Add Task</button>
+        </div>
+        <div id="editDiv">
+            <div id="editFormDiv">
+                <div id="editInputDiv"></div>
+                Name: <input id="taskNameEdit" type="text" placeholder="Task Name">
+                Description: <input id="taskDescriptionEdit" type="text" placeholder="Description of task">
+                Task Complete? <select id="isCompleteEdit">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                               </select>
+                Date Completed: <input id="dateCompleteEdit" type="date">
+                Due Date: <input id="dueDateEdit" type="date">
+            </div>
+            <button id="editBtn">Edit Task</button>
+        </div>
+        <table>
+            <thead>
+                <tr id="tableHeadingRow">
+                    <th id="nameHeading">Task Name</th>
+                    <th id="nameHeading">Description</th>
+                    <th id="nameHeading">Date Added</th>
+                    <th id="nameHeading">Completed</th>
+                    <th id="nameHeading">Date Completed</th>
+                    <th id="nameHeading">Due Date</th>
+                </tr>
+            </thead>
+            <tbody id="taskList">
+                
+            </tbody>
+        </table>
+    </main>
 </body>
 </html>

@@ -4,12 +4,24 @@ const router = express.Router(); // initialize router
 
 const pool = require('../modules/pool'); // import pool
 
-// GET for all tasks sorted by tasks DATE ADDED - newly or oldest is passed as param in url
+// GET for all tasks sorted by tasks DATE ADDED - newest or oldest is passed as param in url
 router.get('/:sortKey', (req, res) => {
     let sort = req.params.sortKey.toUpperCase();
     console.log('This is sort: ', sort);
-    let query = `SELECT * FROM "tasks" ORDER BY "dateAdded" ${sort}`;
-    pool.query(query).then(result => res.send(result.rows));
+    let query = `SELECT * FROM "tasks" ORDER BY "dateAdded" DESC;`;
+    if (sort === 'ASC') { // uses ascending sort if ASC was passed or use DESC by default
+        query = `SELECT * FROM "tasks" ORDER BY "dateAdded" ASC;`;
+    };
+    pool.query(query)
+        .then(result => res.send(result.rows));
+});
+
+// GET for getting a single row
+router.get('/:taskid/task', (req, res) => {
+    let taskID = req.params.taskid;
+    const query = `SELECT * FROM "tasks" WHERE id=$1;`;
+    pool.query(query, [taskID])
+        .then(result => res.send(result.rows));
 });
 
 // POST adding a new task to DB
@@ -52,6 +64,8 @@ router.put('/:taskid/complete', (req, res) => {
 router.put('/:taskid/edit', (req, res) => {
     //get task id from params in url
     const taskId = req.params.taskid;
+    // Call function that will check the non-required data is present and sets
+    // a default value if they are not
     let objWithDefault = setDefaults(req.body);
     const taskName = objWithDefault.taskName;
     const taskDescription = objWithDefault.taskDescription;

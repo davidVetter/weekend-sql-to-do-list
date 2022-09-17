@@ -91,23 +91,17 @@ function displayList(tasks) {
                 <td>${cleanRow.isComplete}</td>
                 <td>${cleanRow.dateComplete}</td>
                 <td>${cleanRow.dueDate}</td>
-                <td>
-                    <div id=buttonDiv">
-                        <button>
-                            <img class="markComplete"
+                <td id="buttonCell">
+                    <div id="buttonDiv">
+                            <img class="markComplete inputBtn"
                                 data-taskid="${record.id}"
                                 src="../../img/icons8-done-64.png">
-                        </button>
-                        <button>
-                            <img class="editBtn"
+                            <img class="editBtn inputBtn"
                                 data-taskid="${record.id}"
                                 src="../../img/icons8-edit-64.png">
-                        </button>
-                        <button>
-                            <img class="deleteBtn"
+                            <img class="deleteBtn inputBtn"
                                 data-taskid="${record.id}"
                                 src="../../img/icons8-trash-can-64.png">
-                        </button>
                     </div>
                 </td>
             </tr>

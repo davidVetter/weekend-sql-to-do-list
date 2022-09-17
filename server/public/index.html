@@ -25,6 +25,7 @@
         </div>
         <div id="editDiv">
             <div id="editFormDiv">
+                <h2>Edit Task</h2>
                 <div id="editInputDiv"></div>
                 Name: <input id="taskNameEdit" type="text" placeholder="Task Name">
                 Description: <input id="taskDescriptionEdit" type="text" placeholder="Description of task">
@@ -43,10 +44,10 @@
                 <tr id="tableHeadingRow">
                     <th id="nameHeading">Task Name</th>
                     <th id="descHeading">Description</th>
-                    <th id="dateAddHeading"><div id="sortDateDiv">Date Added<img id="sortIMG" src="./img/icons8-sort-50.png"></div></th>
+                    <th id="dateAddHeading"><div id="sortDateDiv"><p>Date Added</p><img class="sortIMG" src="./img/icons8-sort-50.png"></div></th>
                     <th id="completedHeading">Completed</th>
                     <th id="dateCompletedHeading">Date Completed</th>
-                    <th id="dueDateHeading">Due Date</th>
+                    <th id="dueDateHeading"><div id="sortDueDiv"><p>Due Date</p><img class="sortIMG" src="./img/icons8-sort-50.png"></div></th>
                 </tr>
             </thead>
             <tbody id="taskList">

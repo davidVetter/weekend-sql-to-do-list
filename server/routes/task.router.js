@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express'); // import express
 const router = express.Router(); // initialize router
 
@@ -70,7 +71,17 @@ router.put('/:taskid/edit', (req, res) => {
 });
 
 // DELETE for removing a task from DB
-
+router.delete('/:taskid', (req, res) => {
+    console.log('Req paramas: ', req.params);
+    const taskId = req.params.taskid;
+    const query = `DELETE FROM "tasks" WHERE id=$1`;
+    pool.query(query, [taskId])
+        .then((response) => res.sendStatus(204))
+        .catch(error => {
+            console.log(error);
+            res.sendStatus(500);
+        });
+});
 // Export router
 module.exports = router;
 

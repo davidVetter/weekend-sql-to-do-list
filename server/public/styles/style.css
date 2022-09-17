@@ -10,6 +10,7 @@ img {
 
 table {
     margin: 0 auto;
+    border-collapse: collapse;
 }
 
 th {
@@ -18,8 +19,14 @@ th {
     text-align: left;
 }
 
+tr {
+    border: none;
+    
+}
+
 td {
     width: 12vw;
+    border: none;
 }
 
 .sortIMG {
@@ -53,4 +60,12 @@ td {
 
 footer {
     font-size: .8vw;
+}
+
+.YesClass {
+    background-color: green;
+}
+
+.NoClass {
+    background-color: red;
 }

@@ -83,8 +83,9 @@ function displayList(tasks) {
     $('#taskList').empty();
     for (let record of tasks) {
         let cleanRow = formatRow(record);
+        
         $('#taskList').append(`
-            <tr class="taskRows">
+            <tr class='taskRows ${cleanRow.isComplete}Class'>
                 <td>${cleanRow.taskName}</td>
                 <td>${cleanRow.taskDescription}</td>
                 <td>${cleanRow.dateAdded}</td>

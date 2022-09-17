@@ -1,8 +1,12 @@
 let sortToggle = true; // if true sort by descending order else by ascending order
+let taskToEdit;
+let readyToEdit = false;
+
 $(onReady); // runs onReady function when page loads
 
 function onReady() {
     console.log('jQuery connnected'); // test log to show this function is being called on load
+    $('#editDiv').hide();
     showTasks();
     clickHandlers();
 }
@@ -10,6 +14,9 @@ function onReady() {
 function clickHandlers() {
     $('#taskList').on('click', '.deleteBtn', deleteTask);
     $('#taskList').on('click', '.markComplete', markTaskComplete);
+    $('#taskList').on('click', '.editBtn', editWhichTask);
+    $('#editSubmitBtn').on('click', editTask);
+    $('#cancelEditBtn').on('click', resetEdit);
 }
 
 function showTasks() {
@@ -40,13 +47,35 @@ function deleteTask(event) {
 
 function markTaskComplete(event) {
     const taskId = $(event.target).data('taskid');
-    const taskcomp = $(event.target).data('taskcomp');
     $.ajax({
         type: 'PUT',
         url: `/tasks/${taskId}/complete`
     }).then(function (){
         showTasks();
     }).catch((error) => console.log('Error in mark task complete', error));
+}
+
+function editTask() {
+    const taskId = taskToEdit;
+    const addObj = getEditInfo();
+    if (readyToEdit === false) {
+        console.log('Error occurred while trying to edit');
+        return;
+    }
+    $.ajax({
+        type: 'PUT',
+        url: `/tasks/${taskId}/edit`,
+        data: {
+            taskName: addObj.taskName,
+            taskDescription: addObj.taskDescription,
+            isComplete: addObj.isComplete,
+            dateComplete: addObj.dateComplete,
+            dueDate: addObj.dueDate
+        }
+    }).then(function() {
+        showTasks();
+        resetEdit();
+    }).catch((error) => console.log(error));
 }
 
 function displayList(tasks) {
@@ -120,10 +149,27 @@ function formatDate(dateDirty) {
 function getEditInfo() {
     let editObj = {
         taskName: $('#taskNameEdit').val(),
-        taskDescription: $('#taskDescription').val(),
+        taskDescription: $('#taskDescriptionEdit').val(),
         isComplete: $('#isCompleteEdit').val(),
         dateComplete: $('#dateCompleteEdit').val(),
         dueDate: $('#dueDateEdit').val()
     }
+    console.log('This is editObj: ', editObj);
     return editObj;
+}
+
+function editWhichTask(event) {
+    taskToEdit = $(event.target).data('taskid');
+    readyToEdit = true;
+    $('#editDiv').show();
+}
+
+function resetEdit() {
+    $('#editDiv').hide();
+    $('#taskNameEdit').val('');
+    $('#taskDescriptionEdit').val('');
+    $('#isCompleteEdit').val('');
+    $('#dateCompleteEdit').val('');
+    $('#dueDateEdit').val('');
+    readyToEdit = false;
 }

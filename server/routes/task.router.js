@@ -65,14 +65,18 @@ router.put('/:taskid/complete', (req, res) => {
 router.put('/:taskid/edit', (req, res) => {
     //get task id from params in url
     const taskId = req.params.taskid;
+    console.log('This is taskId: ', taskId);
     // Call function that will check the non-required data is present and sets
     // a default value if they are not
     let objWithDefault = setDefaults(req.body);
     const taskName = objWithDefault.taskName;
     const taskDescription = objWithDefault.taskDescription;
     const isComplete = objWithDefault.isComplete;
+    console.log('This is isComplete: ', isComplete);
     const dateComplete = objWithDefault.dateComplete;
+    console.log('This is dateComplete: ', dateComplete);
     const dueDate = objWithDefault.dueDate;
+    console.log('This is dueDate: ', dueDate);
     //SQL UPDATE query to make changes to a record
     const query = `UPDATE "tasks" 
                    SET "taskName"=$1, "taskDescription"=$2, "isComplete"=$3, "dateComplete"=$4, "dueDate"=$5 

@@ -2,3 +2,11 @@ img {
     width: 2.5vw;
     height: auto;
 }
+
+th {
+    width: 10vw;
+}
+
+#sortIMG {
+    width: 1.5vw;
+}

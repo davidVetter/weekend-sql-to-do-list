@@ -17,6 +17,7 @@ function clickHandlers() {
     $('#taskList').on('click', '.editBtn', editWhichTask);
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
+    $('#sortDateDiv').on('click', setSort);
 }
 
 function showTasks() {
@@ -172,4 +173,9 @@ function resetEdit() {
     $('#dateCompleteEdit').val('');
     $('#dueDateEdit').val('');
     readyToEdit = false;
+}
+
+function setSort() {
+    sortToggle = !sortToggle;
+    showTasks();
 }

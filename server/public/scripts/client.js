@@ -7,6 +7,7 @@ $(onReady); // runs onReady function when page loads
 function onReady() {
     console.log('jQuery connnected'); // test log to show this function is being called on load
     $('#editDiv').hide();
+    $('#addFormDiv').hide();
     showTasks();
     clickHandlers();
 }
@@ -15,7 +16,9 @@ function clickHandlers() {
     $('#taskList').on('click', '.deleteBtn', deleteTask);
     $('#taskList').on('click', '.markComplete', markTaskComplete);
     $('#taskList').on('click', '.editBtn', editWhichTask);
+    $('#showHideBtn').on('click', displayAddTask);
     $('#addBtn').on('click', addTask);
+    $('#cancelAddBtn').on('click', clearAddInputs);
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
@@ -193,7 +196,18 @@ function setSort() {
 }
 
 function clearAddInputs() {
-    $('#taskNameIn').val(''),
-    $('#taskDescriptionIn').val(''),
-    $('#dueDateIn').val('')
+    $('#taskNameIn').val('');
+    $('#taskDescriptionIn').val('');
+    $('#dueDateIn').val('');
+    displayAddTask();
+}
+
+function displayAddTask() {
+    if ($('#addFormDiv').is(':visible')) {
+        $('#addFormDiv').hide();
+        $('#showHideBtn').show();
+    } else {
+    $('#addFormDiv').show();
+    $('#showHideBtn').hide();
+    };
 }

@@ -8,9 +8,9 @@ const pool = require('../modules/pool'); // import pool
 router.get('/:sortKey', (req, res) => {
     let sort = req.params.sortKey.toUpperCase();
     console.log('This is sort: ', sort);
-    let query = `SELECT * FROM "tasks" ORDER BY "dateAdded" DESC;`;
+    let query = `SELECT * FROM "tasks" ORDER BY "dateAdded" DESC, "id";`;
     if (sort === 'ASC') { // uses ascending sort if ASC was passed or use DESC by default
-        query = `SELECT * FROM "tasks" ORDER BY "dateAdded" ASC;`;
+        query = `SELECT * FROM "tasks" ORDER BY "dateAdded" ASC, "id";`;
     };
     pool.query(query)
         .then(result => res.send(result.rows));

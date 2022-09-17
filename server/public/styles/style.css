@@ -3,9 +3,8 @@ main {
     margin: 0 auto;
 }
 
-img {
-    width: 2vw;
-    height: auto;
+#showHideBtn {
+    background-color: lightgoldenrodyellow;
 }
 
 table {
@@ -52,10 +51,14 @@ td {
 .inputBtn {
     cursor: pointer;
     width: 2vw;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 7px;
 }
 
 #buttonCell {
     width: fit-content;
+    background-color: white;
 }
 
 footer {
@@ -68,4 +71,28 @@ footer {
 
 .NoClass {
     background-color: red;
+}
+
+.markComplete {
+    background-color: greenyellow;
+}
+
+.markComplete:hover {
+    background-color: green;
+}
+
+.editBtn {
+    background-color: lightcyan;
+}
+
+.editBtn:hover {
+    background-color: cyan;
+}
+
+.deleteBtn {
+    background-color: lightcoral;
+}
+
+.deleteBtn:hover {
+    background-color: rgb(234, 72, 72);
 }

@@ -50,6 +50,7 @@ router.post('/', (req, res) => {
 router.put('/:taskid/complete', (req, res) => {
     // which task to change by id that is passed as a parameter in the URL
     const taskId = req.params.taskid;
+    console.log('Req.params in PUT complete: ', taskId);
     // SQL statement that toggles isComplete boolean between true and false
     const query = `UPDATE "tasks" SET "isComplete"=(NOT "isComplete") WHERE id=$1;`;
     pool.query(query, [taskId])

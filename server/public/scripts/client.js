@@ -9,6 +9,7 @@ function onReady() {
 
 function clickHandlers() {
     $('#taskList').on('click', '.deleteBtn', deleteTask);
+    $('#taskList').on('click', '.markComplete', markTaskComplete);
 }
 
 function showTasks() {
@@ -37,6 +38,16 @@ function deleteTask(event) {
     }).catch((error) => console.log('Error in DELETE', error));
 }
 
+function markTaskComplete(event) {
+    const taskId = $(event.target).data('taskid');
+    const taskcomp = $(event.target).data('taskcomp');
+    $.ajax({
+        type: 'PUT',
+        url: `/tasks/${taskId}/complete`
+    }).then(function (){
+        showTasks();
+    }).catch((error) => console.log('Error in mark task complete', error));
+}
 
 function displayList(tasks) {
     $('#taskList').empty();
@@ -50,11 +61,24 @@ function displayList(tasks) {
                 <td>${cleanRow.isComplete}</td>
                 <td>${cleanRow.dateComplete}</td>
                 <td>${cleanRow.dueDate}</td>
-                <td><button class="deleteBtn">
-                    <img class="deleteBtn"
-                        data-taskid="${record.id}"
-                        src="../../img/icons8-trash-can-64.png">
-                    </button>
+                <td>
+                    <div id=buttonDiv">
+                        <button>
+                            <img class="markComplete"
+                                data-taskid="${record.id}"
+                                src="../../img/icons8-done-64.png">
+                        </button>
+                        <button>
+                            <img class="editBtn"
+                                data-taskid="${record.id}"
+                                src="../../img/icons8-edit-64.png">
+                        </button>
+                        <button>
+                            <img class="deleteBtn"
+                                data-taskid="${record.id}"
+                                src="../../img/icons8-trash-can-64.png">
+                        </button>
+                    </div>
                 </td>
             </tr>
         `);
@@ -91,4 +115,15 @@ function formatRow(obj) {
 function formatDate(dateDirty) {
     let niceDate = new Date(dateDirty);
     return niceDate.toLocaleDateString();
+}
+
+function getEditInfo() {
+    let editObj = {
+        taskName: $('#taskNameEdit').val(),
+        taskDescription: $('#taskDescription').val(),
+        isComplete: $('#isCompleteEdit').val(),
+        dateComplete: $('#dateCompleteEdit').val(),
+        dueDate: $('#dueDateEdit').val()
+    }
+    return editObj;
 }

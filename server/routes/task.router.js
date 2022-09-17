@@ -34,7 +34,18 @@ router.post('/', (req, res) => {
 });
 
 // PUT for updating if a task is completed ONLY
-
+router.put('/:taskid/complete', (req, res) => {
+    // which task to change by id that is passed as a parameter in the URL
+    const taskId = req.params.taskid;
+    // SQL statement that toggles isComplete boolean between true and false
+    const query = `UPDATE "tasks" SET "isComplete"=(NOT "isComplete") WHERE id=$1;`;
+    pool.query(query, [taskId])
+        .then((response) => res.sendStatus(200))
+        .catch(error => {
+        console.log(error);
+        res.sendStatus(500);
+    });
+});
 
 // PUT for updating any info on a task (edit mode)
 

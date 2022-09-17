@@ -48,8 +48,41 @@ router.put('/:taskid/complete', (req, res) => {
 });
 
 // PUT for updating any info on a task (edit mode)
+router.put('/:taskid/edit', (req, res) => {
+    //get task id from params in url
+    const taskId = req.params.taskid;
+    let objWithDefault = setDefaults(req.body);
+    const taskName = objWithDefault.taskName;
+    const taskDescription = objWithDefault.taskDescription;
+    const isComplete = objWithDefault.isComplete;
+    const dateComplete = objWithDefault.dateComplete;
+    const dueDate = objWithDefault.dueDate;
+    //SQL UPDATE query to make changes to a record
+    const query = `UPDATE "tasks" 
+                   SET "taskName"=$1, "taskDescription"=$2, "isComplete"=$3, "dateComplete"=$4, "dueDate"=$5 
+                   WHERE id=$6`;
+    pool.query(query, [taskName, taskDescription, isComplete, dateComplete, dueDate, taskId])
+        .then((response) => res.sendStatus(200))
+        .catch(error => {
+            console.log(error);
+            res.sendStatus(500);
+        });
+});
 
 // DELETE for removing a task from DB
 
 // Export router
 module.exports = router;
+
+function setDefaults(obj) {
+    if (!obj.isComplete) {
+        obj.isComplete = false;
+    }
+    if (!obj.dateComplete) {
+        obj.dateComplete = null;
+    }
+    if (!obj.dueDate) {
+        obj.dueDate = null;
+    }
+    return obj;
+}

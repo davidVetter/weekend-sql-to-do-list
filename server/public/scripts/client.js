@@ -15,6 +15,7 @@ function clickHandlers() {
     $('#taskList').on('click', '.deleteBtn', deleteTask);
     $('#taskList').on('click', '.markComplete', markTaskComplete);
     $('#taskList').on('click', '.editBtn', editWhichTask);
+    $('#addBtn').on('click', addTask);
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
@@ -32,6 +33,22 @@ function showTasks() {
         console.log('Response from showTasks: ', response);
         displayList(response);
     }).catch((error) => console.log('Error in showTasks', error));
+}
+
+function addTask() {
+    $.ajax({
+        type: 'POST',
+        url: `/tasks`,
+        data: {
+            taskName: $('#taskNameIn').val(),
+            taskDescription: $('#taskDescriptionIn').val(),
+            dueDate: $('#dueDateIn').val()
+        }
+    }).then((response) => {
+        console.log('Response from server ', response);
+        showTasks();
+        clearAddInputs();
+    }).catch((error) => console.log(error));
 }
 
 function deleteTask(event) {
@@ -173,4 +190,10 @@ function resetEdit() {
 function setSort() {
     sortToggle = !sortToggle;
     showTasks();
+}
+
+function clearAddInputs() {
+    $('#taskNameIn').val(''),
+    $('#taskDescriptionIn').val(''),
+    $('#dueDateIn').val('')
 }

@@ -25,6 +25,19 @@ function showTasks() {
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
+function deleteTask(event) {
+    const taskId = $(event.target).data('taskid');
+    console.log(taskId);
+    $.ajax({
+        type: 'DELETE',
+        url: `/tasks/${taskId}`
+    }).then(function(response) {
+        console.log('Response from deleteTask: ', response);
+        showTasks();
+    }).catch((error) => console.log('Error in DELETE', error));
+}
+
+
 function displayList(tasks) {
     $('#taskList').empty();
     for (let record of tasks) {

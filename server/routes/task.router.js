@@ -5,7 +5,8 @@ const pool = require('../modules/pool'); // import pool
 
 //GET for all tasks sorted by tasks DATE ADDED - newly or oldest is passed as param in url
 router.get('/:sortKey', (req, res) => {
-    let query = `SELECT * FROM "tasks" ORDER BY "date_added" "${req.params.sortKey}"`;
+    let sort = req.params.sortKey.toUpperCase();
+    let query = `SELECT * FROM "tasks" ORDER BY "dateAdded" ${sort}`;
     pool.query(query).then(result => res.send(result.rows));
 });
 

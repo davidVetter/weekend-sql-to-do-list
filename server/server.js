@@ -1,4 +1,4 @@
-const express = required('express'); // import express
+const express = require('express'); // import express
 const taskRouter = require('./routes/task.router'); // import koala router
 const PORT = process.env.PORT || 5000; // setup PORT to use env variable port OR default to 5000
 const app = express(); // initialize express

@@ -4,7 +4,7 @@ const router = express.Router(); // initialize router
 
 const pool = require('../modules/pool'); // import pool
 
-//GET for all tasks sorted by tasks DATE ADDED - newly or oldest is passed as param in url
+// GET for all tasks sorted by tasks DATE ADDED - newly or oldest is passed as param in url
 router.get('/:sortKey', (req, res) => {
     let sort = req.params.sortKey.toUpperCase();
     console.log('This is sort: ', sort);
@@ -12,7 +12,7 @@ router.get('/:sortKey', (req, res) => {
     pool.query(query).then(result => res.send(result.rows));
 });
 
-//POST adding a new task to DB
+// POST adding a new task to DB
 router.post('/', (req, res) => {
     let newTask = req.body; // gets req.body (data sent in through POST)
     console.log('Adding this task: ', newTask); // logs newTask being added to DB
@@ -82,9 +82,11 @@ router.delete('/:taskid', (req, res) => {
             res.sendStatus(500);
         });
 });
+
 // Export router
 module.exports = router;
 
+// This function sets some default values if values aren't present during edit PUT
 function setDefaults(obj) {
     if (!obj.isComplete) {
         obj.isComplete = false;

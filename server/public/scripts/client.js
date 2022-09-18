@@ -15,7 +15,7 @@ function onReady() {
 }
 
 function clickHandlers() {
-    $('#mainSection').on('click', '.deleteBtn', deleteTask);
+    $('#mainSection').on('click', '.deleteBtn', deleteConfirm);
     $('#mainSection').on('click', '.markComplete', markTaskComplete);
     $('#mainSection').on('click', '.editBtn', editWhichTask);
     $('.showHideBtn').on('click', displayAddTask);
@@ -388,4 +388,24 @@ function checkScreenSize(response) {
     } else if ($(window).width() < 500) {
         // Display smallest table of info
     }
+}
+
+function deleteConfirm(event){
+    swal({
+        title:"Confirm Delete?",
+        text: "This operation cannot be undone. Are you sure?",
+        buttons: {
+            cancel: true,
+            confirm: "Yes, Delete"
+        }
+    }).then( val => {
+        if(val) {
+            swal({
+                title: "Delete Successful!",
+                text: "Task has been removed from database.",
+                icon: "success"
+            });
+            deleteTask(event);
+        }
+    });
 }

@@ -11,7 +11,7 @@ function onReady() {
     $('#addFormDiv').hide();
     showTasks();
     clickHandlers();
-    $(window).resize(showTasks);
+    $(window).resize(debounce(showTasks, 150));
 }
 
 function clickHandlers() {
@@ -408,4 +408,14 @@ function deleteConfirm(event){
             deleteTask(event);
         }
     });
+}
+
+function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this;
+        const args = arguments;
+            clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    }
 }

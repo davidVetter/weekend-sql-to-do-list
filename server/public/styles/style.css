@@ -3,8 +3,19 @@ main {
     margin: 0 auto;
 }
 
+#addBtnHeading {
+    text-align: center;
+    border: none;
+}
+
 #showHideBtn {
     background-color: lightgoldenrodyellow;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+#showHideBtn:hover {
+    background-color: goldenrod;
 }
 
 table {
@@ -127,3 +138,22 @@ footer {
     background-color: rgb(234, 72, 72);
 }
 
+@media only screen and (max-width: 960px) {
+    body {
+        background-color: lightcyan;
+        margin: 0 auto;
+    }
+    main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+    #showHideBtn {
+        background-color: lightgoldenrodyellow;
+        width: 5vw;
+    }
+    table {
+        width: 100%;
+    }
+}

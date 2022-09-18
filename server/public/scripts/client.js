@@ -7,9 +7,11 @@ $(onReady); // runs onReady function when page loads
 function onReady() {
     console.log('jQuery connnected'); // test log to show this function is being called on load
     $('#editDiv').hide();
+    $('#testElement').hide();
     $('#addFormDiv').hide();
     showTasks();
     clickHandlers();
+    $(window).resize(checkScreenSize);
 }
 
 function clickHandlers() {
@@ -216,4 +218,16 @@ function displayAddTask() {
     $('#addFormDiv').show();
     $('#showHideBtn').hide();
     };
+}
+
+function checkScreenSize() {
+    if ($(window).width() > 960) {
+        $('#testElement').hide();
+        // Display standard size
+    } else if ($(window).width() < 960) {
+        $('#testElement').show();
+        // Display mid sized table
+    } else if ($(window).width() < 500) {
+        // Display smallest table of info
+    }
 }

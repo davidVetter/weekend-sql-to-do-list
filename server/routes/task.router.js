@@ -24,6 +24,20 @@ router.get('/:taskid/task', (req, res) => {
         .then(result => res.send(result.rows));
 });
 
+router.get('/:sortBy/:sortKey/anySort', (req, res) => {
+    const sortBy = `"${req.params.sortBy}"`;
+    const sortKey = req.params.sortKey.toUpperCase();
+    console.log('This is sortBy', sortBy);
+    let query = (`SELECT * FROM "tasks" ORDER BY LOWER(` + sortBy + `) ` + sortKey + `;`);
+    if (sortBy === `"dueDate"` || sortBy === `"dateComplete"` || sortBy === `"dateAdded"`) {
+        query = (`SELECT * FROM "tasks" ORDER BY ` + sortBy + ' ' + sortKey + `;`);
+    }
+    pool.query(query).then(result => {
+        console.log(result.rows);
+        res.send(result.rows);
+    });
+});
+
 // POST adding a new task to DB
 router.post('/', (req, res) => {
     let newTask = req.body; // gets req.body (data sent in through POST)

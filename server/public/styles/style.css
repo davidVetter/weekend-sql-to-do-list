@@ -46,6 +46,10 @@ td {
     font-size: 1.2vw;
 }
 
+#totalTasks {
+    text-align: right;
+}
+
 .completeCell {
     width: 2vw;
 }
@@ -71,6 +75,7 @@ td {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    justify-content: center;
 }
 
 .descriptionCell {

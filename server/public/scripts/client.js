@@ -1,6 +1,7 @@
 let sortToggle = true; // if true sort by descending order else by ascending order
 let taskToEdit;
 let readyToEdit = false;
+let lastSort;
 
 $(onReady); // runs onReady function when page loads
 
@@ -24,6 +25,7 @@ function clickHandlers() {
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
+    $('#sortSelectOption').change(showTasksAnySort);
 }
 
 function showTasks() {
@@ -36,6 +38,23 @@ function showTasks() {
         url: `/tasks/${sort}`
     }).then(function(response) {
         console.log('Response from showTasks: ', response);
+        displayList(response);
+    }).catch((error) => console.log('Error in showTasks', error));
+}
+
+function showTasksAnySort() {
+    if ($('#sortSelectOption').val() === 'Select option to sort...') {
+        return;
+    }
+    let sortArray = $('#sortSelectOption').val().split(',');
+    let sortBy = sortArray[0];
+    let sort = sortArray[1];
+    $.ajax({
+        type: 'GET',
+        url: `/tasks/${sortBy}/${sort}/anySort`
+    }).then(function(response) {
+        console.log('Response from showTasks: ', response);
+        resetEdit();
         displayList(response);
     }).catch((error) => console.log('Error in showTasks', error));
 }

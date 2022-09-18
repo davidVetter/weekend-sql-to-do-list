@@ -10,12 +10,15 @@ main {
 table {
     margin: 0 auto;
     border-collapse: collapse;
+    border-radius: 7px;
 }
 
 th {
     width: 10vw;
-    font-size: 1.5vw;
+    font-size: 1.4vw;
     text-align: left;
+    border: 1px solid black;
+    padding-left: 3px;
 }
 
 tr {
@@ -23,9 +26,18 @@ tr {
     
 }
 
+.taskRows:nth-child(odd) {
+    opacity: .90;
+}
+
 td {
-    width: 12vw;
+    width: fit-content;
     border: none;
+    font-size: 1.2vw;
+}
+
+.completeCell {
+    width: 2vw;
 }
 
 .sortIMG {
@@ -40,12 +52,19 @@ td {
     flex-wrap: nowrap;
     justify-content: start;
     align-items: center;
+    word-break: keep-all;
+    word-wrap: normal;
+    cursor: pointer;
 }
 
 #buttonDiv {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+}
+
+.descriptionCell {
+    width: 20vw;
 }
 
 .inputBtn {
@@ -73,14 +92,6 @@ footer {
     background-color: red;
 }
 
-.markComplete {
-    background-color: greenyellow;
-}
-
-.markComplete:hover {
-    background-color: green;
-}
-
 .editBtn {
     background-color: lightcyan;
 }
@@ -89,10 +100,30 @@ footer {
     background-color: cyan;
 }
 
+.editSelect {
+    background-color: blue;
+}
+
 .deleteBtn {
     background-color: lightcoral;
 }
 
 .deleteBtn:hover {
+    background-color: rgb(234, 72, 72);
+}
+
+.NoBtn {
+    background-color: lightgreen;
+}
+
+.NoBtn:hover {
+    background-color: lawngreen;
+}
+
+.YesBtn {
+    background-color: lightcoral;
+}
+
+.YesBtn:hover {
     background-color: rgb(234, 72, 72);
 }

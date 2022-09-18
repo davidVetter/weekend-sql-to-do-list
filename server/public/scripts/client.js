@@ -103,18 +103,17 @@ function displayList(tasks) {
     $('#taskList').empty();
     for (let record of tasks) {
         let cleanRow = formatRow(record);
-        
         $('#taskList').append(`
             <tr class='taskRows ${cleanRow.isComplete}Class'>
                 <td>${cleanRow.taskName}</td>
-                <td>${cleanRow.taskDescription}</td>
-                <td>${cleanRow.dateAdded}</td>
-                <td>${cleanRow.isComplete}</td>
-                <td>${cleanRow.dateComplete}</td>
+                <td class="descriptionCell">${cleanRow.taskDescription}</td>
                 <td>${cleanRow.dueDate}</td>
+                <td class="completeCell">${cleanRow.isComplete}</td>
+                <td>${cleanRow.dateComplete}</td>
+                <td>${cleanRow.dateAdded}</td>
                 <td id="buttonCell">
                     <div id="buttonDiv">
-                            <img class="markComplete inputBtn"
+                            <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
                                 data-taskid="${record.id}"
                                 src="../../img/icons8-done-64.png">
                             <img class="editBtn inputBtn"
@@ -175,7 +174,13 @@ function getEditInfo() {
 }
 
 function editWhichTask(event) {
+    if (readyToEdit && $(event.target).data('taskid') === taskToEdit) {
+        resetEdit();
+        return;
+    }
     taskToEdit = $(event.target).data('taskid');
+    $('.editBtn').removeClass('editSelect');
+    $(event.target).addClass('editSelect');
     readyToEdit = true;
     $('#editDiv').show();
 }
@@ -188,6 +193,7 @@ function resetEdit() {
     $('#dateCompleteEdit').val('');
     $('#dueDateEdit').val('');
     readyToEdit = false;
+    $('.editBtn').removeClass('editSelect')
 }
 
 function setSort() {

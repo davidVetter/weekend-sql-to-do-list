@@ -192,9 +192,28 @@ footer {
         text-align: center;
         width: 100%;
         background-color: lightgoldenrodyellow;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
     }
-    textarea {
-        width: 85%;
+    .completeDiv {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
     }
-    
+    .descriptionText {
+        background-color: yellow;
+        color: purple;
+        width: 65%;
+        margin: 0 auto;
+        border-radius: 7px;
+    }
+    .editNameDiv {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
 }

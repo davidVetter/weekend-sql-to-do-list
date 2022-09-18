@@ -29,7 +29,7 @@ router.get('/:sortBy/:sortKey/anySort', (req, res) => {
     const sortKey = req.params.sortKey.toUpperCase();
     console.log('This is sortBy', sortBy);
     let query = (`SELECT * FROM "tasks" ORDER BY LOWER(` + sortBy + `) ` + sortKey + `;`);
-    if (sortBy === `"dueDate"` || sortBy === `"dateComplete"` || sortBy === `"dateAdded"`) {
+    if (sortBy === `"dueDate"` || sortBy === `"dateComplete"` || sortBy === `"dateAdded"` || sortBy === `"isComplete"`) {
         query = (`SELECT * FROM "tasks" ORDER BY ` + sortBy + ' ' + sortKey + `;`);
     }
     pool.query(query).then(result => {

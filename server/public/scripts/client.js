@@ -1,7 +1,6 @@
 let sortToggle = true; // if true sort by descending order else by ascending order
 let taskToEdit;
 let readyToEdit = false;
-let lastSort;
 
 $(onReady); // runs onReady function when page loads
 
@@ -26,6 +25,7 @@ function clickHandlers() {
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
     $('#sortSelectOption').change(showTasksAnySort);
+    $('#mediumLayoutDiv').change('#sortSelectOption',showTasksAnySort);
     $('#mediumLayoutDiv').on('click', '.showHideBtn',displayAddTask);
 }
 
@@ -51,6 +51,7 @@ function showTasksAnySort() {
     let sortArray = $('#sortSelectOption').val().split(',');
     let sortBy = sortArray[0];
     let sort = sortArray[1];
+
     $.ajax({
         type: 'GET',
         url: `/tasks/${sortBy}/${sort}/anySort`
@@ -197,26 +198,40 @@ function displayListMedium(tasks) {
     $('#mediumLayoutDiv').empty();
     $('#mediumLayoutDiv').append(`<div id="showHideBtnDivMed">
                                     <img title="Create New Task" class="showHideBtn" src="./img/icons8-create-50.png">
+                                    <select id="sortSelectOption">
+                                        <option>Select option to sort...</option>
+                                        <option value="taskName, ASC">Name (A-Z)</option>
+                                        <option value="taskName, DESC">Name (Z-A)</option>
+                                        <option value="dueDate, ASC">Due Date (Oldest)</option>
+                                        <option value="dueDate, DESC">Due Date (Newest)</option>
+                                        <option value="isComplete, ASC">Completed (No-Yes)</option>
+                                        <option value="isComplete, DESC">Completed (Yes-No)</option>
+                                        <option value="dateComplete, ASC">Date Completed (Oldest)</option>
+                                        <option value="dateComplete, DESC">Date Completed (Newest)</option>
+                                        <option value="dateAdded, ASC">Date Added (Oldest)</option>
+                                        <option value="dateAdded, DESC">Date Added (Newest)</option>
+                                    </select>
                                  </div>`);
     for (let record of tasks) {
         let cleanRow = formatRow(record);
         $('#mediumLayoutDiv').append(`
             <div class='taskMainDiv ${cleanRow.isComplete}Class'>
-                <div class="nameDiv">${cleanRow.taskName}
-                <img class="editBtn inputBtn"
-                    data-taskid="${record.id}"
-                    src="../../img/icons8-edit-64.png">
+            <div class="editNameDiv">
+            <img class="editBtn inputBtn"
+            data-taskid="${record.id}"
+            src="../../img/icons8-edit-64.png">Task: ${cleanRow.taskName}</div>
+            <div class="nameDiv">
                 </div>
-                <div class=""><p>${cleanRow.taskDescription}</p></div>
-                <div class="botBorderCells">Due Date: ${cleanRow.dueDate}</div>
-                <div class="completeDiv botBorderCells">
+                <div class=""><p class="descriptionText">${cleanRow.taskDescription}</p></div>
+                <div class="">Due Date: ${cleanRow.dueDate}</div>
+                <div class="completeDiv">
                 <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
-                    data-taskid="${record.id}"
-                    src="../../img/icons8-done-64.png">
-                ${cleanRow.isComplete}
+                data-taskid="${record.id}"
+                src="../../img/icons8-done-64.png">
+                <p>Complete? ${cleanRow.isComplete}&nbsp;-&nbsp;</p>
+                    <div class="">  Date Completed: ${cleanRow.dateComplete}</div>
                 </div>
-                <div class="botBorderCells">Date Completed: ${cleanRow.dateComplete}</div>
-                <div class="botBorderCells">Date Added: ${cleanRow.dateAdded}</div>
+                <div class="">Date Added: ${cleanRow.dateAdded}</div>
                 <div id="buttonOuterDiv">
                     <div id="buttonDiv" data-taskid="${record.id}">
                             <img class="deleteBtn inputBtn"
@@ -333,10 +348,10 @@ function clearAddInputs() {
 function displayAddTask() {
     if ($('#addFormDiv').is(':visible')) {
         $('#addFormDiv').hide();
-        $('#showHideBtn').show();
+        $('.showHideBtn').show();
     } else {
     $('#addFormDiv').show();
-    $('#showHideBtn').hide();
+    $('.showHideBtn').hide();
     };
 }
 

@@ -12,7 +12,7 @@
 </head>
 <body>
 <header>
-    <h1>Task List</h1>
+    <h1 id="mainTitle">Task List</h1>
         <p class="mq" id="testElement">DID THIS SHOW UP???</p>
     </header>
     <main id="mainSection">
@@ -45,6 +45,8 @@
         <div id="mediumLayoutDiv">
 
         </div>
+        <div id="tableWrapper">
+            <div id="tableInnerWrapper">
         <table>
             <thead>
                 <tr id="tableHeadingRow">
@@ -55,6 +57,7 @@
                     <th id="dateCompletedHeading">Date Completed</th>
                     <th id="dateAddHeading"><div id="sortDateDiv"><p>Date Added</p><img class="sortIMG" src="./img/icons8-sort-50.png"></div></th>
                     <th id="addBtnHeading">
+                        <div id="addBtnSortSelectDiv">
                         <img title="Create New Task" class="showHideBtn" src="./img/icons8-create-50.png">
                         <select id="sortSelectOption">
                             <option>Select option to sort...</option>
@@ -69,6 +72,7 @@
                             <option value="dateAdded, ASC">Date Added (Oldest)</option>
                             <option value="dateAdded, DESC">Date Added (Newest)</option>
                         </select>
+                    </div>
                     </th>
                 </tr>
             </thead>
@@ -77,10 +81,12 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" id="totalTasks">PlaceHolder</td>
+                    <td colspan="6" id="totalTasks"></td>
                 </tr>
             </tfoot>
         </table>
+    </div>
+</div>
     </main>
     <footer>
         <a target="_blank" href="https://icons8.com/icon/2o0oz6BtYr5E/edit">Edit</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br />

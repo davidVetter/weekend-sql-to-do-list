@@ -176,7 +176,7 @@ function editTask() {
 
 function displayList(tasks) {
     $('#taskList').empty();
-    $('table').show();
+    $('#tableWrapper').show();
     $('#mediumLayoutDiv').hide();
     $('#mediumLayoutDiv').empty();
     for (let record of tasks) {
@@ -209,7 +209,7 @@ function displayList(tasks) {
 
 function displayListMedium(tasks) {
     $('#taskList').empty();
-    $('table').hide();
+    $('#tableWrapper').hide();
     $('#mediumLayoutDiv').show();
     $('#mediumLayoutDiv').empty();
     $('#mediumLayoutDiv').append(`<div id="showHideBtnDivMed">

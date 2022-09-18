@@ -1,47 +1,116 @@
+body {
+    background-color: #3a3335;
+    margin: 0 auto;
+    color: #f0544f;
+}
 main {
     width: 90%;
     margin: 0 auto;
 }
 
+#mainTitle {
+    background-color: #0cce6b;
+    color: #0cce6b;
+    width: auto;
+    padding: 2%;
+    font-size: 6vw;
+    background-image: url('https://images.unsplash.com/reserve/NV0eHnNkQDHA21GC3BAJ_Paris%20Louvr.jpg?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80');
+    background-size: 100%;
+    background-position: center;
+    text-align: right;
+    text-shadow: 0 0 7px #f0544f;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: #f0e2e7;
+    border-bottom: 3px solid #f0544f;
+}
+
 #addBtnHeading {
     text-align: center;
     border: none;
+    padding: 10px 5px 5px;
+}
+
+input {
+    background-color: #f0e2e7;
+    color: #3f84e5;
+    box-shadow: 0 0 3px black;
 }
 
 .showHideBtn {
-    background-color: lightgoldenrodyellow;
+    background-color: #0cce6b;
     cursor: pointer;
     border-radius: 7px;
+    box-shadow: 0 0 3px black;
+    margin-bottom: 5px;
 }
 
 .showHideBtn:hover {
-    background-color: goldenrod;
+    background-color: #09994e;
+}
+
+#addBtnSortSelectDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+#tableWrapper {
+    background-color: #3f84e5;
+    background-image: url('https://images.unsplash.com/photo-1513705153361-9bc726c8db67?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80');
+    background-position: center;
+    background-size: cover;
+    border-radius: 7px;
+    padding: 3%;
+    border: 3px inset black;
+}
+
+#tableInnerWrapper {
+    padding: 10px;
+    border-radius: 7px;
+    background-color: #3a3335;
+    border: 3px outset #3a3335;
+    margin: 5px;
+    box-shadow: 0 0 3px black;
 }
 
 table {
     margin: 0 auto;
     border-collapse: collapse;
-    border-radius: 7px;
+    color: #3a3335;
 }
 
 th {
-    width: 10vw;
+    width: 12vw;
+    height: auto;
     font-size: 1.4vw;
     text-align: left;
-    border: 1px solid black;
-    padding-left: 3px;
+    border: 1px solid #3a3335;
+    padding-left: 5px;
+    background-color: #3f84e5;
+    color: #f0e2e7;
 }
 
+#addBtnHeading {
+    background-color: #3a3335;
+    text-align: center;
+}
 .botBorderCells {
-    border-bottom: 1px solid black; 
+    border-top: 2px solid #f0e2e7;
+    box-sizing: border-box;
 }
 
+select {
+    background-color: #3f84e5;
+}
 .taskRows:nth-child(odd) {
     opacity: .90;
 }
 
 td {
-    width: fit-content;
+    width: 12vw;
+    height: auto;
     border: none;
     font-size: 1.2vw;
 }
@@ -76,6 +145,7 @@ td {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: center;
+    height: auto;
 }
 
 .descriptionCell {
@@ -85,14 +155,15 @@ td {
 .inputBtn {
     cursor: pointer;
     width: 2vw;
-    margin: 5px;
+    margin: 5px 5px 6px;
     padding: 5px;
     border-radius: 7px;
+    box-shadow: 0 0 3px black;
 }
 
 #buttonCell {
     width: fit-content;
-    background-color: white;
+    background-color: #3a3335;
 }
 
 footer {
@@ -100,53 +171,54 @@ footer {
 }
 
 .YesClass {
-    background-color: green;
+    background-color: #0cce6b;
 }
 
 .NoClass {
-    background-color: red;
+    background-color: #f0544f;
 }
 
 .editBtn {
-    background-color: lightcyan;
+    background-color: #f0e2e7;
 }
 
 .editBtn:hover {
-    background-color: cyan;
+    background-color: #eeb3c7;
 }
 
 .editSelect {
-    background-color: blue;
+    background-color: #3f84e5;
 }
 
 .deleteBtn {
-    background-color: lightcoral;
+    background-color: #f0544f;
 }
 
 .deleteBtn:hover {
-    background-color: rgb(234, 72, 72);
+    background-color: #ba4844;
 }
 
 .NoBtn {
-    background-color: lightgreen;
+    background-color: #0cce6b;
 }
 
 .NoBtn:hover {
-    background-color: lawngreen;
+    background-color: #09994e;
 }
 
 .YesBtn {
-    background-color: lightcoral;
+    background-color: #f0544f;
 }
 
 .YesBtn:hover {
-    background-color: rgb(234, 72, 72);
+    background-color: #ba4844;
 }
 
 @media only screen and (max-width: 960px) {
     body {
         background-color: lightcyan;
         margin: 0 auto;
+        color: #3a3335;
     }
     main {
         width: 100%;
@@ -155,7 +227,7 @@ footer {
         flex-wrap: nowrap;
     }
     .showHideBtn {
-        background-color: lightgoldenrodyellow;
+        background-color: #ff7700;
         width: 5vw;
     }
     table {

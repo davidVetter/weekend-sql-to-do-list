@@ -21,9 +21,8 @@ th {
     padding-left: 3px;
 }
 
-tr {
-    border: none;
-    
+.botBorderCells {
+    border-bottom: 1px solid black; 
 }
 
 .taskRows:nth-child(odd) {
@@ -127,3 +126,4 @@ footer {
 .YesBtn:hover {
     background-color: rgb(234, 72, 72);
 }
+

@@ -105,12 +105,12 @@ function displayList(tasks) {
         let cleanRow = formatRow(record);
         $('#taskList').append(`
             <tr class='taskRows ${cleanRow.isComplete}Class'>
-                <td>${cleanRow.taskName}</td>
-                <td class="descriptionCell">${cleanRow.taskDescription}</td>
-                <td>${cleanRow.dueDate}</td>
-                <td class="completeCell">${cleanRow.isComplete}</td>
-                <td>${cleanRow.dateComplete}</td>
-                <td>${cleanRow.dateAdded}</td>
+                <td class="botBorderCells">${cleanRow.taskName}</td>
+                <td class="descriptionCell botBorderCells">${cleanRow.taskDescription}</td>
+                <td class="botBorderCells">${cleanRow.dueDate}</td>
+                <td class="completeCell botBorderCells">${cleanRow.isComplete}</td>
+                <td class="botBorderCells">${cleanRow.dateComplete}</td>
+                <td class="botBorderCells">${cleanRow.dateAdded}</td>
                 <td id="buttonCell">
                     <div id="buttonDiv">
                             <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"

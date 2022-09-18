@@ -19,13 +19,14 @@ function clickHandlers() {
     $('#mainSection').on('click', '.deleteBtn', deleteTask);
     $('#mainSection').on('click', '.markComplete', markTaskComplete);
     $('#mainSection').on('click', '.editBtn', editWhichTask);
-    $('#showHideBtn').on('click', displayAddTask);
+    $('.showHideBtn').on('click', displayAddTask);
     $('#addBtn').on('click', addTask);
     $('#cancelAddBtn').on('click', clearAddInputs);
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
     $('#sortSelectOption').change(showTasksAnySort);
+    $('#mediumLayoutDiv').on('click', '.showHideBtn',displayAddTask);
 }
 
 function showTasks() {
@@ -101,12 +102,21 @@ function deleteTask(event) {
 
 function markTaskComplete(event) {
     const taskId = $(event.target).data('taskid');
+    if ($(event.target).hasClass('YesBtn')) {
+        $.ajax({
+            type: 'PUT',
+            url: `/tasks/${taskId}/notcomplete`
+        }).then(function (){
+            showTasks();
+        }).catch((error) => console.log('Error in mark task complete', error));
+    } else {
     $.ajax({
         type: 'PUT',
         url: `/tasks/${taskId}/complete`
     }).then(function (){
         showTasks();
     }).catch((error) => console.log('Error in mark task complete', error));
+}
 }
 
 function editTask() {
@@ -170,6 +180,9 @@ function displayListMedium(tasks) {
     $('table').hide();
     $('#mediumLayoutDiv').show();
     $('#mediumLayoutDiv').empty();
+    $('#mediumLayoutDiv').append(`<div id="showHideBtnDivMed">
+                                    <img title="Create New Task" class="showHideBtn" src="./img/icons8-create-50.png">
+                                 </div>`);
     for (let record of tasks) {
         let cleanRow = formatRow(record);
         $('#mediumLayoutDiv').append(`
@@ -179,16 +192,16 @@ function displayListMedium(tasks) {
                     data-taskid="${record.id}"
                     src="../../img/icons8-edit-64.png">
                 </div>
-                <div class="descriptionCell botBorderCells">${cleanRow.taskDescription}</div>
-                <div class="botBorderCells">${cleanRow.dueDate}</div>
+                <div class=""><p>${cleanRow.taskDescription}</p></div>
+                <div class="botBorderCells">Due Date: ${cleanRow.dueDate}</div>
                 <div class="completeDiv botBorderCells">
                 <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
                     data-taskid="${record.id}"
                     src="../../img/icons8-done-64.png">
                 ${cleanRow.isComplete}
                 </div>
-                <div class="botBorderCells">${cleanRow.dateComplete}</div>
-                <div class="botBorderCells">${cleanRow.dateAdded}</div>
+                <div class="botBorderCells">Date Completed: ${cleanRow.dateComplete}</div>
+                <div class="botBorderCells">Date Added: ${cleanRow.dateAdded}</div>
                 <div id="buttonOuterDiv">
                     <div id="buttonDiv" data-taskid="${record.id}">
                             <img class="deleteBtn inputBtn"

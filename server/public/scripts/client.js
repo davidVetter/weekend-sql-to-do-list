@@ -12,13 +12,13 @@ function onReady() {
     $('#addFormDiv').hide();
     showTasks();
     clickHandlers();
-    $(window).resize(checkScreenSize);
+    $(window).resize(showTasks);
 }
 
 function clickHandlers() {
-    $('#taskList').on('click', '.deleteBtn', deleteTask);
-    $('#taskList').on('click', '.markComplete', markTaskComplete);
-    $('#taskList').on('click', '.editBtn', editWhichTask);
+    $('#mainSection').on('click', '.deleteBtn', deleteTask);
+    $('#mainSection').on('click', '.markComplete', markTaskComplete);
+    $('#mainSection').on('click', '.editBtn', editWhichTask);
     $('#showHideBtn').on('click', displayAddTask);
     $('#addBtn').on('click', addTask);
     $('#cancelAddBtn').on('click', clearAddInputs);
@@ -38,7 +38,8 @@ function showTasks() {
         url: `/tasks/${sort}`
     }).then(function(response) {
         console.log('Response from showTasks: ', response);
-        displayList(response);
+        // displayList(response);
+        checkScreenSize(response);
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
@@ -55,7 +56,8 @@ function showTasksAnySort() {
     }).then(function(response) {
         console.log('Response from showTasks: ', response);
         resetEdit();
-        displayList(response);
+        // displayList(response);
+        checkScreenSize(response);
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
@@ -132,6 +134,9 @@ function editTask() {
 
 function displayList(tasks) {
     $('#taskList').empty();
+    $('table').show();
+    $('#mediumLayoutDiv').hide();
+    $('#mediumLayoutDiv').empty();
     for (let record of tasks) {
         let cleanRow = formatRow(record);
         $('#taskList').append(`
@@ -156,6 +161,42 @@ function displayList(tasks) {
                     </div>
                 </td>
             </tr>
+        `);
+    }
+}
+
+function displayListMedium(tasks) {
+    $('#taskList').empty();
+    $('table').hide();
+    $('#mediumLayoutDiv').show();
+    $('#mediumLayoutDiv').empty();
+    for (let record of tasks) {
+        let cleanRow = formatRow(record);
+        $('#mediumLayoutDiv').append(`
+            <div class='taskMainDiv ${cleanRow.isComplete}Class'>
+                <div class="nameDiv">${cleanRow.taskName}
+                <img class="editBtn inputBtn"
+                    data-taskid="${record.id}"
+                    src="../../img/icons8-edit-64.png">
+                </div>
+                <div class="descriptionCell botBorderCells">${cleanRow.taskDescription}</div>
+                <div class="botBorderCells">${cleanRow.dueDate}</div>
+                <div class="completeDiv botBorderCells">
+                <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
+                    data-taskid="${record.id}"
+                    src="../../img/icons8-done-64.png">
+                ${cleanRow.isComplete}
+                </div>
+                <div class="botBorderCells">${cleanRow.dateComplete}</div>
+                <div class="botBorderCells">${cleanRow.dateAdded}</div>
+                <div id="buttonOuterDiv">
+                    <div id="buttonDiv" data-taskid="${record.id}">
+                            <img class="deleteBtn inputBtn"
+                                data-taskid="${record.id}"
+                                src="../../img/icons8-trash-can-64.png">
+                    </div>
+                </div>
+            </div>
         `);
     }
 }
@@ -271,12 +312,14 @@ function displayAddTask() {
     };
 }
 
-function checkScreenSize() {
+function checkScreenSize(response) {
     if ($(window).width() > 960) {
+        displayList(response);
         $('#testElement').hide();
         // Display standard size
     } else if ($(window).width() < 960) {
         $('#testElement').show();
+        displayListMedium(response);
         // Display mid sized table
     } else if ($(window).width() < 500) {
         // Display smallest table of info

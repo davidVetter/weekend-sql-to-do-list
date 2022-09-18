@@ -24,6 +24,20 @@ router.get('/:taskid/task', (req, res) => {
         .then(result => res.send(result.rows));
 });
 
+router.get('/:sortBy/:sortKey/anySort', (req, res) => {
+    const sortBy = `"${req.params.sortBy}"`;
+    const sortKey = req.params.sortKey.toUpperCase();
+    console.log('This is sortBy', sortBy);
+    let query = (`SELECT * FROM "tasks" ORDER BY LOWER(` + sortBy + `) ` + sortKey + `;`);
+    if (sortBy === `"dueDate"` || sortBy === `"dateComplete"` || sortBy === `"dateAdded"` || sortBy === `"isComplete"`) {
+        query = (`SELECT * FROM "tasks" ORDER BY ` + sortBy + ' ' + sortKey + `;`);
+    }
+    pool.query(query).then(result => {
+        console.log(result.rows);
+        res.send(result.rows);
+    });
+});
+
 // POST adding a new task to DB
 router.post('/', (req, res) => {
     let newTask = req.body; // gets req.body (data sent in through POST)
@@ -52,7 +66,22 @@ router.put('/:taskid/complete', (req, res) => {
     const taskId = req.params.taskid;
     console.log('Req.params in PUT complete: ', taskId);
     // SQL statement that toggles isComplete boolean between true and false
-    const query = `UPDATE "tasks" SET "isComplete"=(NOT "isComplete") WHERE id=$1;`;
+    let query = `UPDATE "tasks" SET "isComplete"=(NOT "isComplete"), "dateComplete"=NOW() WHERE id=$1;`;
+    pool.query(query, [taskId])
+        .then((response) => res.sendStatus(200))
+        .catch(error => {
+        console.log(error);
+        res.sendStatus(500);
+    });
+});
+
+// PUT for updating if a task is completed ONLY
+router.put('/:taskid/notcomplete', (req, res) => {
+    // which task to change by id that is passed as a parameter in the URL
+    const taskId = req.params.taskid;
+    console.log('Req.params in PUT complete: ', taskId);
+    // SQL statement that toggles isComplete boolean between true and false
+    let query = `UPDATE "tasks" SET "isComplete"=(NOT "isComplete"), "dateComplete"=NULL WHERE id=$1;`;
     pool.query(query, [taskId])
         .then((response) => res.sendStatus(200))
         .catch(error => {
@@ -73,7 +102,10 @@ router.put('/:taskid/edit', (req, res) => {
     const taskDescription = objWithDefault.taskDescription;
     const isComplete = objWithDefault.isComplete;
     console.log('This is isComplete: ', isComplete);
-    const dateComplete = objWithDefault.dateComplete;
+    let dateComplete = objWithDefault.dateComplete;
+    if (!isComplete) {
+        dateComplete = null;
+    }
     console.log('This is dateComplete: ', dateComplete);
     const dueDate = objWithDefault.dueDate;
     console.log('This is dueDate: ', dueDate);

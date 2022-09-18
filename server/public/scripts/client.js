@@ -7,21 +7,26 @@ $(onReady); // runs onReady function when page loads
 function onReady() {
     console.log('jQuery connnected'); // test log to show this function is being called on load
     $('#editDiv').hide();
+    $('#testElement').hide();
     $('#addFormDiv').hide();
     showTasks();
     clickHandlers();
+    $(window).resize(showTasks);
 }
 
 function clickHandlers() {
-    $('#taskList').on('click', '.deleteBtn', deleteTask);
-    $('#taskList').on('click', '.markComplete', markTaskComplete);
-    $('#taskList').on('click', '.editBtn', editWhichTask);
-    $('#showHideBtn').on('click', displayAddTask);
+    $('#mainSection').on('click', '.deleteBtn', deleteTask);
+    $('#mainSection').on('click', '.markComplete', markTaskComplete);
+    $('#mainSection').on('click', '.editBtn', editWhichTask);
+    $('.showHideBtn').on('click', displayAddTask);
     $('#addBtn').on('click', addTask);
     $('#cancelAddBtn').on('click', clearAddInputs);
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
+    $('#sortSelectOption').change(showTasksAnySort);
+    $('#mediumLayoutDiv').change('#sortSelectOption',showTasksAnySort);
+    $('#mediumLayoutDiv').on('click', '.showHideBtn',displayAddTask);
 }
 
 function showTasks() {
@@ -34,8 +39,38 @@ function showTasks() {
         url: `/tasks/${sort}`
     }).then(function(response) {
         console.log('Response from showTasks: ', response);
-        displayList(response);
+        // displayList(response);
+        checkScreenSize(response);
     }).catch((error) => console.log('Error in showTasks', error));
+}
+
+function showTasksAnySort() {
+    if ($('#sortSelectOption').val() === 'Select option to sort...') {
+        return;
+    }
+    let sortArray = $('#sortSelectOption').val().split(',');
+    let sortBy = sortArray[0];
+    let sort = sortArray[1];
+
+    $.ajax({
+        type: 'GET',
+        url: `/tasks/${sortBy}/${sort}/anySort`
+    }).then(function(response) {
+        console.log('Response from showTasks: ', response);
+        resetEdit();
+        // displayList(response);
+        checkScreenSize(response);
+    }).catch((error) => console.log('Error in showTasks', error));
+}
+
+function getEditInputs() {
+    $.ajax({
+        type: 'GET',
+        url: `/tasks/${taskToEdit}/task`
+    }).then((response) => {
+        console.log('Response from setEditInputs: ', response);
+        setEditInputs(response);
+    })
 }
 
 function addTask() {
@@ -68,12 +103,21 @@ function deleteTask(event) {
 
 function markTaskComplete(event) {
     const taskId = $(event.target).data('taskid');
+    if ($(event.target).hasClass('YesBtn')) {
+        $.ajax({
+            type: 'PUT',
+            url: `/tasks/${taskId}/notcomplete`
+        }).then(function (){
+            showTasks();
+        }).catch((error) => console.log('Error in mark task complete', error));
+    } else {
     $.ajax({
         type: 'PUT',
         url: `/tasks/${taskId}/complete`
     }).then(function (){
         showTasks();
     }).catch((error) => console.log('Error in mark task complete', error));
+}
 }
 
 function editTask() {
@@ -82,7 +126,22 @@ function editTask() {
     if (readyToEdit === false) {
         console.log('Error occurred while trying to edit');
         return;
+    };
+
+    console.log('This is addObj in editTask: ', addObj);
+    if(!addObj.isComplete && addObj.dateComplete) {
+        addObj.isComplete = true;
     }
+
+    if (addObj.isComplete && !addObj.dateComplete) {
+        addObj.dateComplete = formatDate(new Date());
+        console.log("This is dateComplete: ", addObj.dateComplete);
+    }
+
+    if (addObj.isComplete === 'false') {
+        addObj.dateComplete = null;
+    };
+
     $.ajax({
         type: 'PUT',
         url: `/tasks/${taskId}/edit`,
@@ -101,6 +160,9 @@ function editTask() {
 
 function displayList(tasks) {
     $('#taskList').empty();
+    $('table').show();
+    $('#mediumLayoutDiv').hide();
+    $('#mediumLayoutDiv').empty();
     for (let record of tasks) {
         let cleanRow = formatRow(record);
         $('#taskList').append(`
@@ -129,10 +191,64 @@ function displayList(tasks) {
     }
 }
 
+function displayListMedium(tasks) {
+    $('#taskList').empty();
+    $('table').hide();
+    $('#mediumLayoutDiv').show();
+    $('#mediumLayoutDiv').empty();
+    $('#mediumLayoutDiv').append(`<div id="showHideBtnDivMed">
+                                    <img title="Create New Task" class="showHideBtn" src="./img/icons8-create-50.png">
+                                    <select id="sortSelectOption">
+                                        <option>Select option to sort...</option>
+                                        <option value="taskName, ASC">Name (A-Z)</option>
+                                        <option value="taskName, DESC">Name (Z-A)</option>
+                                        <option value="dueDate, ASC">Due Date (Oldest)</option>
+                                        <option value="dueDate, DESC">Due Date (Newest)</option>
+                                        <option value="isComplete, ASC">Completed (No-Yes)</option>
+                                        <option value="isComplete, DESC">Completed (Yes-No)</option>
+                                        <option value="dateComplete, ASC">Date Completed (Oldest)</option>
+                                        <option value="dateComplete, DESC">Date Completed (Newest)</option>
+                                        <option value="dateAdded, ASC">Date Added (Oldest)</option>
+                                        <option value="dateAdded, DESC">Date Added (Newest)</option>
+                                    </select>
+                                 </div>`);
+    for (let record of tasks) {
+        let cleanRow = formatRow(record);
+        $('#mediumLayoutDiv').append(`
+            <div class='taskMainDiv ${cleanRow.isComplete}Class'>
+            <div class="editNameDiv">
+            <img class="editBtn inputBtn"
+            data-taskid="${record.id}"
+            src="../../img/icons8-edit-64.png">Task: ${cleanRow.taskName}</div>
+            <div class="nameDiv">
+                </div>
+                <div class=""><p class="descriptionText">${cleanRow.taskDescription}</p></div>
+                <div class="">Due Date: ${cleanRow.dueDate}</div>
+                <div class="completeDiv">
+                <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
+                data-taskid="${record.id}"
+                src="../../img/icons8-done-64.png">
+                <p>Complete? ${cleanRow.isComplete}&nbsp;-&nbsp;</p>
+                    <div class="">  Date Completed: ${cleanRow.dateComplete}</div>
+                </div>
+                <div class="">Date Added: ${cleanRow.dateAdded}</div>
+                <div id="buttonOuterDiv">
+                    <div id="buttonDiv" data-taskid="${record.id}">
+                            <img class="deleteBtn inputBtn"
+                                data-taskid="${record.id}"
+                                src="../../img/icons8-trash-can-64.png">
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+}
+
 // This function will take in an obj from "tasks" table
 // It check if some values are present and inserts default
 // values if needed. It also formats dates
 function formatRow(obj) {
+    console.log('This is obj entering: ', obj);
     obj.dateAdded = formatDate(obj.dateAdded);
     // Converts true or false to Yes or No
     if (obj.isComplete) {
@@ -152,7 +268,7 @@ function formatRow(obj) {
     } else {
         obj.dueDate = formatDate(obj.dueDate);
     };
-
+    console.log('This is obj: ', obj);
     return obj;
 }
 
@@ -183,6 +299,7 @@ function editWhichTask(event) {
     $(event.target).addClass('editSelect');
     readyToEdit = true;
     $('#editDiv').show();
+    getEditInputs();
 }
 
 function resetEdit() {
@@ -201,6 +318,26 @@ function setSort() {
     showTasks();
 }
 
+function setEditInputs(row) {
+    console.log('This is row: ', row);
+    let cleanRow = formatRow(row[0]);
+    console.log('This is cleanRow: ', cleanRow);
+    console.log('This is taskName? ', cleanRow.taskName);
+    $('#taskNameEdit').val(cleanRow.taskName);
+    $('#taskDescriptionEdit').val(cleanRow.taskDescription);
+    $('#isCompleteEdit').val(`${cleanRow.isComplete}`);
+    
+    if (cleanRow.dateComplete === 'Not completed') {
+        cleanRow.dateComplete = '';
+    }
+    $('#dateCompleteEdit').val(cleanRow.dateComplete);
+    
+    if (cleanRow.dueDate === 'No due date') {
+        cleanRow.dueDate = '';
+    }
+    $('#dueDateEdit').val(cleanRow.dueDate);
+}
+
 function clearAddInputs() {
     $('#taskNameIn').val('');
     $('#taskDescriptionIn').val('');
@@ -211,9 +348,23 @@ function clearAddInputs() {
 function displayAddTask() {
     if ($('#addFormDiv').is(':visible')) {
         $('#addFormDiv').hide();
-        $('#showHideBtn').show();
+        $('.showHideBtn').show();
     } else {
     $('#addFormDiv').show();
-    $('#showHideBtn').hide();
+    $('.showHideBtn').hide();
     };
+}
+
+function checkScreenSize(response) {
+    if ($(window).width() > 960) {
+        displayList(response);
+        $('#testElement').hide();
+        // Display standard size
+    } else if ($(window).width() < 960) {
+        $('#testElement').show();
+        displayListMedium(response);
+        // Display mid sized table
+    } else if ($(window).width() < 500) {
+        // Display smallest table of info
+    }
 }

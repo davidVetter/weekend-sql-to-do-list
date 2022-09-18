@@ -125,7 +125,22 @@ function editTask() {
     if (readyToEdit === false) {
         console.log('Error occurred while trying to edit');
         return;
+    };
+
+    console.log('This is addObj in editTask: ', addObj);
+    if(!addObj.isComplete && addObj.dateComplete) {
+        addObj.isComplete = true;
     }
+
+    if (addObj.isComplete && !addObj.dateComplete) {
+        addObj.dateComplete = formatDate(new Date());
+        console.log("This is dateComplete: ", addObj.dateComplete);
+    }
+
+    if (addObj.isComplete === 'false') {
+        addObj.dateComplete = null;
+    };
+
     $.ajax({
         type: 'PUT',
         url: `/tasks/${taskId}/edit`,
@@ -295,7 +310,7 @@ function setEditInputs(row) {
     console.log('This is taskName? ', cleanRow.taskName);
     $('#taskNameEdit').val(cleanRow.taskName);
     $('#taskDescriptionEdit').val(cleanRow.taskDescription);
-    $('#isCompleteEdit').val(cleanRow.isComplete);
+    $('#isCompleteEdit').val(`${cleanRow.isComplete}`);
     
     if (cleanRow.dateComplete === 'Not completed') {
         cleanRow.dateComplete = '';

@@ -102,7 +102,10 @@ router.put('/:taskid/edit', (req, res) => {
     const taskDescription = objWithDefault.taskDescription;
     const isComplete = objWithDefault.isComplete;
     console.log('This is isComplete: ', isComplete);
-    const dateComplete = objWithDefault.dateComplete;
+    let dateComplete = objWithDefault.dateComplete;
+    if (!isComplete) {
+        dateComplete = null;
+    }
     console.log('This is dateComplete: ', dateComplete);
     const dueDate = objWithDefault.dueDate;
     console.log('This is dueDate: ', dueDate);

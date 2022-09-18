@@ -24,6 +24,7 @@ function clickHandlers() {
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
+    $('#sortDueDiv').on('click', setSortDue);
     $('#sortSelectOption').change(showTasksAnySort);
     $('#mediumLayoutDiv').change('#sortSelectOption',showTasksAnySort);
     $('#mediumLayoutDiv').on('click', '.showHideBtn',displayAddTask);
@@ -37,6 +38,21 @@ function showTasks() {
     $.ajax({
         type: 'GET',
         url: `/tasks/${sort}`
+    }).then(function(response) {
+        console.log('Response from showTasks: ', response);
+        // displayList(response);
+        checkScreenSize(response);
+    }).catch((error) => console.log('Error in showTasks', error));
+}
+
+function showTasksDue() {
+    let sort = 'DESC';
+    if (!sortToggle) {
+        sort = 'ASC';
+    }
+    $.ajax({
+        type: 'GET',
+        url: `/tasks/${sort}/duedate`
     }).then(function(response) {
         console.log('Response from showTasks: ', response);
         // displayList(response);
@@ -202,8 +218,8 @@ function displayListMedium(tasks) {
                                         <option>Select option to sort...</option>
                                         <option value="taskName, ASC">Name (A-Z)</option>
                                         <option value="taskName, DESC">Name (Z-A)</option>
-                                        <option value="dueDate, ASC">Due Date (Oldest)</option>
-                                        <option value="dueDate, DESC">Due Date (Newest)</option>
+                                        <option value="dueDate, ASC">Due Date (Most Due)</option>
+                                        <option value="dueDate, DESC">Due Date (Least Due)</option>
                                         <option value="isComplete, ASC">Completed (No-Yes)</option>
                                         <option value="isComplete, DESC">Completed (Yes-No)</option>
                                         <option value="dateComplete, ASC">Date Completed (Oldest)</option>
@@ -316,6 +332,11 @@ function resetEdit() {
 function setSort() {
     sortToggle = !sortToggle;
     showTasks();
+}
+
+function setSortDue() {
+    sortToggle = !sortToggle;
+    showTasksDue();
 }
 
 function setEditInputs(row) {

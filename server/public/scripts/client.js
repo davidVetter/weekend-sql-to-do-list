@@ -59,6 +59,16 @@ function showTasksAnySort() {
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
+function getEditInputs() {
+    $.ajax({
+        type: 'GET',
+        url: `/tasks/${taskToEdit}/task`
+    }).then((response) => {
+        console.log('Response from setEditInputs: ', response);
+        setEditInputs(response);
+    })
+}
+
 function addTask() {
     $.ajax({
         type: 'POST',
@@ -154,6 +164,7 @@ function displayList(tasks) {
 // It check if some values are present and inserts default
 // values if needed. It also formats dates
 function formatRow(obj) {
+    console.log('This is obj entering: ', obj);
     obj.dateAdded = formatDate(obj.dateAdded);
     // Converts true or false to Yes or No
     if (obj.isComplete) {
@@ -173,7 +184,7 @@ function formatRow(obj) {
     } else {
         obj.dueDate = formatDate(obj.dueDate);
     };
-
+    console.log('This is obj: ', obj);
     return obj;
 }
 
@@ -204,6 +215,7 @@ function editWhichTask(event) {
     $(event.target).addClass('editSelect');
     readyToEdit = true;
     $('#editDiv').show();
+    getEditInputs();
 }
 
 function resetEdit() {
@@ -220,6 +232,26 @@ function resetEdit() {
 function setSort() {
     sortToggle = !sortToggle;
     showTasks();
+}
+
+function setEditInputs(row) {
+    console.log('This is row: ', row);
+    let cleanRow = formatRow(row[0]);
+    console.log('This is cleanRow: ', cleanRow);
+    console.log('This is taskName? ', cleanRow.taskName);
+    $('#taskNameEdit').val(cleanRow.taskName);
+    $('#taskDescriptionEdit').val(cleanRow.taskDescription);
+    $('#isCompleteEdit').val(cleanRow.isComplete);
+    
+    if (cleanRow.dateComplete === 'Not completed') {
+        cleanRow.dateComplete = '';
+    }
+    $('#dateCompleteEdit').val(cleanRow.dateComplete);
+    
+    if (cleanRow.dueDate === 'No due date') {
+        cleanRow.dueDate = '';
+    }
+    $('#dueDateEdit').val(cleanRow.dueDate);
 }
 
 function clearAddInputs() {

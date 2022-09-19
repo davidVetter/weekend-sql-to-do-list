@@ -3,16 +3,26 @@ body {
     margin: 0 auto;
     color: #f0544f;
 }
+
+#mainDiv {
+    width: fit-content;
+}
+
 main {
-    width: 90%;
+    width: auto;
     margin: 0 auto;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; */
 }
 
 #mainTitle {
     background-color: #0cce6b;
     color: #0cce6b;
     width: auto;
-    padding: 2%;
+    height: auto;
+    padding: 10px;
     font-size: 6vw;
     background-image: url('https://images.unsplash.com/reserve/NV0eHnNkQDHA21GC3BAJ_Paris%20Louvr.jpg?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80');
     background-size: 100%;
@@ -22,6 +32,44 @@ main {
     -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: #f0e2e7;
     border-bottom: 3px solid #f0544f;
+}
+
+.addEditHeading {
+    font-size: 3vw;
+}
+
+#addInputDiv, #editInputDiv {
+    display: flex;
+    flex-direction: column;
+    color: #f0544f;
+    font-size: 1.5vw;
+
+}
+
+#addBtn, #editSubmitBtn {
+    background-color: #0cce6b;
+    border-radius: 7px;
+    box-shadow: 0 0 3px black;
+    border: none;
+    font-size: 1.1vw;
+}
+
+#addBtn:hover, #editSubmitBtn:hover {
+    background-color: #09994e;
+    border-radius: 7px;
+}
+
+#cancelAddBtn, #cancelEditBtn {
+    background-color: #f0544f;
+    border-radius: 7px;
+    box-shadow: 0 0 3px black;
+    border: none;
+    font-size: 1.1vw;
+}
+
+#cancelAddBtn:hover, #cancelEditBtn:hover {
+    background-color: #ba4844;
+    border-radius: 7px;
 }
 
 #addBtnHeading {
@@ -62,23 +110,26 @@ input {
     background-position: center;
     background-size: cover;
     border-radius: 7px;
-    padding: 3%;
+    padding: 10px;
     border: 3px inset black;
+    width: fit-content;
 }
 
 #tableInnerWrapper {
     padding: 10px;
     border-radius: 7px;
-    background-color: #3a3335;
+    background-color: #f0e2e7;
     border: 3px outset #3a3335;
     margin: 5px;
     box-shadow: 0 0 3px black;
+    width: auto;
 }
 
 table {
     margin: 0 auto;
     border-collapse: collapse;
     color: #3a3335;
+    width: fit-content;
 }
 
 th {
@@ -92,6 +143,10 @@ th {
     color: #f0e2e7;
 }
 
+tbody {
+    font-size: 4vw;
+}
+
 #addBtnHeading {
     background-color: #3a3335;
     text-align: center;
@@ -103,6 +158,7 @@ th {
 
 select {
     background-color: #3f84e5;
+    box-shadow: 0 0 3px black;
 }
 .taskRows:nth-child(odd) {
     opacity: .90;
@@ -129,7 +185,16 @@ td {
     float: left;
 }
 
-#sortDateDiv, #sortDueDiv {
+#sortDateDiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#sortDueDiv {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -148,8 +213,41 @@ td {
     height: auto;
 }
 
+#nameOuterDiv {
+    width: max-content;
+    max-width: 8vw;
+}
+
+#nameInnerDiv {
+    width: auto;
+    margin: 5px;
+    padding: 5px;
+}
+
 .descriptionCell {
-    width: 20vw;
+    height: fit-content;
+    background-color: #3a3335;
+    color: #f0e2e7;
+    border-radius: 7px;
+    width: fit-content;
+    margin: 0 auto 5px;
+    padding: 5px;
+    box-shadow: 0 0 3px black;
+}
+
+#descriptionBig {
+    margin: 5px;
+    background-color: #3f84e5;
+    border-radius: 7px;
+    padding: 5px;
+    width: auto;
+    word-wrap: break-word;
+}
+
+#descriptionInnerDiv {
+    margin: 5px;
+    width: auto;
+    padding: 5px;
 }
 
 .inputBtn {
@@ -216,9 +314,15 @@ footer {
 
 @media only screen and (max-width: 960px) {
     body {
-        background-color: lightcyan;
+        background-color: #3a3335;
         margin: 0 auto;
         color: #3a3335;
+        min-width: 300px;
+        width: auto;
+        height: auto;
+    }
+    #mainDiv {
+        width: auto;
     }
     main {
         width: 100%;
@@ -226,15 +330,45 @@ footer {
         flex-direction: column;
         flex-wrap: nowrap;
     }
+    #mainTitle {
+        margin: 0;
+        height: 6vh;
+        color: #f0544f;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        -webkit-text-stroke-width: 0px;
+        text-shadow: 0 0 3px #0cce6b;
+        background-image: none;
+        background-color: #3a3335;
+        font-size: 13vw;
+    }
+
+    #addInputDiv, #editInputDiv {
+        font-size: 4vw;
+    
+    }
+
+    #addBtn, #editSubmitBtn, #cancelAddBtn, #cancelEditBtn {
+        font-size: 3vw;
+    }
+
     .showHideBtn {
-        background-color: #ff7700;
-        width: 5vw;
+        background-color: #0cce6b;
+        width: 6vw;
+        height: auto;
+        margin-top: 5px;
+        margin-left: 5px;
+        padding: 5px;
+    }
+    .showHideBtn:hover {
+        background-color: #09994e;
     }
     table {
         width: 100%;
     }
     #mediumLayoutDiv {
-        width: 90%;
+        width: 100%;
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
@@ -250,9 +384,15 @@ footer {
     }
     #buttonDiv {
         width: 100%;
-        height: fit-content;
-        background-color: lightcoral;
+        background-color: #3f84e5;
+        border-top: 1vh solid #f0e2e7;
+        align-items: center;
         margin: 0;
+        display: block;
+    }
+    .deleteBtn {
+        width: fit-content;
+        font-size: 4vw;
     }
     .nameDiv {
         text-align: center;
@@ -263,7 +403,6 @@ footer {
     #showHideBtnDivMed {
         text-align: center;
         width: 100%;
-        background-color: lightgoldenrodyellow;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -273,19 +412,63 @@ footer {
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        height: fit-content;
+        font-size: 6vw;
     }
     .descriptionText {
-        background-color: yellow;
-        color: purple;
+        color: #f0e2e7;
         width: 65%;
         margin: 0 auto;
         border-radius: 7px;
+        word-wrap: break-word;
     }
     .editNameDiv {
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
+        font-size: 6vw;
+        font-weight: 800;
+        background-color: #f0e2e7;
+        border-radius: 7px;
+        width: 80%;
+        margin: 5px auto;
+        box-shadow: 0 0 3px black;
     }
 
+    .smallDateDiv {
+        margin: 0 auto 5px;
+        font-size: 6vw;
+    }
+
+    #completeLabel {
+        margin: 5px auto;
+    }
+
+    .descriptionDivSmall {
+        height: fit-content;
+        background-color: #3a3335;
+        border-radius: 7px;
+        width: 90%;
+        margin: 0 auto 5px;
+        padding: 5px 10px;
+        box-shadow: 0 0 3px black;
+        font-size: 5vw;
+    }
+
+    .editBtn, .markComplete {
+        width: 6vw;
+        height: auto;
+        margin-top: 5px;
+        margin-left: 5px;
+        padding: 5px;
+    }
+    select {
+        border-radius: 7px;
+        margin: 3px 0;
+        box-shadow: 0 0 3px black;
+        font-size: 3vw;
+        height: auto;
+    }
+    
 }

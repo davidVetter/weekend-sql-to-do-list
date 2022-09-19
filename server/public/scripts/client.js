@@ -183,8 +183,20 @@ function displayList(tasks) {
         let cleanRow = formatRow(record);
         $('#taskList').append(`
             <tr class='taskRows ${cleanRow.isComplete}Class'>
-                <td class="botBorderCells">${cleanRow.taskName}</td>
-                <td class="descriptionCell botBorderCells">${cleanRow.taskDescription}</td>
+                <td class="botBorderCells nameCell">
+                    <div id="nameOuterDiv">
+                        <div id="nameInnerDiv">
+                            <p>${cleanRow.taskName}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="descriptionCell botBorderCells">
+                    <div id="descriptionBig">
+                        <div id="descriptionInnerDiv">
+                            <p>${cleanRow.taskDescription}</p>
+                        </div>
+                    </div>
+                </td>
                 <td class="botBorderCells">${cleanRow.dueDate}</td>
                 <td class="completeCell botBorderCells">${cleanRow.isComplete}</td>
                 <td class="botBorderCells">${cleanRow.dateComplete}</td>
@@ -230,7 +242,7 @@ function displayListMedium(tasks) {
                                  </div>`);
     for (let record of tasks) {
         let cleanRow = formatRow(record);
-        $('#mediumLayoutDiv').append(`
+        $("#mediumLayoutDiv").append(`
             <div class='taskMainDiv ${cleanRow.isComplete}Class'>
             <div class="editNameDiv">
             <img class="editBtn inputBtn"
@@ -238,21 +250,20 @@ function displayListMedium(tasks) {
             src="../../img/icons8-edit-64.png">Task: ${cleanRow.taskName}</div>
             <div class="nameDiv">
                 </div>
-                <div class=""><p class="descriptionText">${cleanRow.taskDescription}</p></div>
-                <div class="">Due Date: ${cleanRow.dueDate}</div>
+                <div class="descriptionDivSmall"><p class="descriptionText">Description: ${cleanRow.taskDescription}</p></div>
+                <div class="smallDateDiv">Due Date: ${cleanRow.dueDate}</div>
                 <div class="completeDiv">
+                <p id="completeLabel">Complete? ${cleanRow.isComplete}</p>
+                <div class="smallDateDiv">  Date Completed: ${cleanRow.dateComplete}</div>
+                </div>
                 <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
                 data-taskid="${record.id}"
                 src="../../img/icons8-done-64.png">
-                <p>Complete? ${cleanRow.isComplete}&nbsp;-&nbsp;</p>
-                    <div class="">  Date Completed: ${cleanRow.dateComplete}</div>
-                </div>
-                <div class="">Date Added: ${cleanRow.dateAdded}</div>
+                <div class="smallDateDiv">Date Added: ${cleanRow.dateAdded}</div>
                 <div id="buttonOuterDiv">
                     <div id="buttonDiv" data-taskid="${record.id}">
-                            <img class="deleteBtn inputBtn"
-                                data-taskid="${record.id}"
-                                src="../../img/icons8-trash-can-64.png">
+                            <button class="deleteBtn inputBtn"
+                                data-taskid="${record.id}">Remove Task</button>
                     </div>
                 </div>
             </div>

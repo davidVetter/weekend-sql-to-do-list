@@ -13,23 +13,23 @@
 <body>
 <header>
     <h1 id="mainTitle">Task List</h1>
-        <p class="mq" id="testElement">DID THIS SHOW UP???</p>
     </header>
+    <div id="mainDiv">
     <main id="mainSection">
         <div id="addFormDiv">
-            <h2 id="addEditHeading">Create New Task</h2>
+            <h2 class="addEditHeading">Create New Task</h2>
             <div id="addInputDiv">
                 Name: <input id="taskNameIn" type="text" placeholder="Task Name">
                 Description: <input id="taskDescriptionIn" type="text" placeholder="Description of task">
                 Due Date: <input id="dueDateIn" type="date">
             </div>
-            <button id="addBtn">Add Task</button>
-            <button id="cancelAddBtn">Cancel</button>
+            <button class="addFormBtn" id="addBtn">Add Task</button>
+            <button class="addFormBtn" id="cancelAddBtn">Cancel</button>
         </div>
         <div id="editDiv">
             <div id="editFormDiv">
-                <h2>Edit Task</h2>
-                <div id="editInputDiv"></div>
+                <h2 class="addEditHeading">Edit Task</h2>
+                <div id="editInputDiv">
                 Name: <input id="taskNameEdit" type="text" placeholder="Task Name">
                 Description: <input id="taskDescriptionEdit" type="text" placeholder="Description of task">
                 Task Complete? <select id="isCompleteEdit" required>
@@ -38,6 +38,7 @@
                                </select>
                 Date Completed: <input id="dateCompleteEdit" type="text">
                 Due Date: <input id="dueDateEdit" type="text">
+                </div>
             </div>
             <button id="editSubmitBtn">Edit Task</button>
             <button id="cancelEditBtn">Cancel Edit</button>
@@ -88,6 +89,7 @@
     </div>
 </div>
     </main>
+</div>
     <footer>
         <a target="_blank" href="https://icons8.com/icon/2o0oz6BtYr5E/edit">Edit</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br />
         <a target="_blank" href="https://icons8.com/icon/CEbRS8fles5K/trash-can">Trash Can</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br />

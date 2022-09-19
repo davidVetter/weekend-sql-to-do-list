@@ -11,10 +11,6 @@ body {
 main {
     width: auto;
     margin: 0 auto;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; */
 }
 
 #mainTitle {
@@ -160,6 +156,11 @@ select {
     background-color: #3f84e5;
     box-shadow: 0 0 3px black;
 }
+
+select:hover {
+    cursor: pointer;
+}
+
 .taskRows:nth-child(odd) {
     opacity: .90;
 }

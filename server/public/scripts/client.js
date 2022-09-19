@@ -368,6 +368,7 @@ function setEditInputs(row) {
         cleanRow.dueDate = '';
     }
     $('#dueDateEdit').val(cleanRow.dueDate);
+    scrollToTop();
 }
 
 function clearAddInputs() {
@@ -384,6 +385,7 @@ function displayAddTask() {
     } else {
     $('#addFormDiv').show();
     $('.showHideBtn').hide();
+    scrollToTop();
     };
 }
 
@@ -429,4 +431,8 @@ function debounce(func, delay) {
             clearTimeout(debounceTimer);
                 debounceTimer = setTimeout(() => func.apply(context, args), delay);
     }
+}
+
+function scrollToTop() {
+    $(window).scrollTop(0);
 }

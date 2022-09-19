@@ -11,11 +11,11 @@ function onReady() {
     $('#addFormDiv').hide();
     showTasks();
     clickHandlers();
-    $(window).resize(showTasks);
+    $(window).resize(debounce(showTasks, 150));
 }
 
 function clickHandlers() {
-    $('#mainSection').on('click', '.deleteBtn', deleteTask);
+    $('#mainSection').on('click', '.deleteBtn', deleteConfirm);
     $('#mainSection').on('click', '.markComplete', markTaskComplete);
     $('#mainSection').on('click', '.editBtn', editWhichTask);
     $('.showHideBtn').on('click', displayAddTask);
@@ -24,6 +24,7 @@ function clickHandlers() {
     $('#editSubmitBtn').on('click', editTask);
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
+    $('#sortDueDiv').on('click', setSortDue);
     $('#sortSelectOption').change(showTasksAnySort);
     $('#mediumLayoutDiv').change('#sortSelectOption',showTasksAnySort);
     $('#mediumLayoutDiv').on('click', '.showHideBtn',displayAddTask);
@@ -37,6 +38,21 @@ function showTasks() {
     $.ajax({
         type: 'GET',
         url: `/tasks/${sort}`
+    }).then(function(response) {
+        console.log('Response from showTasks: ', response);
+        // displayList(response);
+        checkScreenSize(response);
+    }).catch((error) => console.log('Error in showTasks', error));
+}
+
+function showTasksDue() {
+    let sort = 'DESC';
+    if (!sortToggle) {
+        sort = 'ASC';
+    }
+    $.ajax({
+        type: 'GET',
+        url: `/tasks/${sort}/duedate`
     }).then(function(response) {
         console.log('Response from showTasks: ', response);
         // displayList(response);
@@ -160,15 +176,27 @@ function editTask() {
 
 function displayList(tasks) {
     $('#taskList').empty();
-    $('table').show();
+    $('#tableWrapper').show();
     $('#mediumLayoutDiv').hide();
     $('#mediumLayoutDiv').empty();
     for (let record of tasks) {
         let cleanRow = formatRow(record);
         $('#taskList').append(`
             <tr class='taskRows ${cleanRow.isComplete}Class'>
-                <td class="botBorderCells">${cleanRow.taskName}</td>
-                <td class="descriptionCell botBorderCells">${cleanRow.taskDescription}</td>
+                <td class="botBorderCells nameCell">
+                    <div id="nameOuterDiv">
+                        <div id="nameInnerDiv">
+                            <p>${cleanRow.taskName}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="descriptionCell botBorderCells">
+                    <div id="descriptionBig">
+                        <div id="descriptionInnerDiv">
+                            <p>${cleanRow.taskDescription}</p>
+                        </div>
+                    </div>
+                </td>
                 <td class="botBorderCells">${cleanRow.dueDate}</td>
                 <td class="completeCell botBorderCells">${cleanRow.isComplete}</td>
                 <td class="botBorderCells">${cleanRow.dateComplete}</td>
@@ -193,7 +221,7 @@ function displayList(tasks) {
 
 function displayListMedium(tasks) {
     $('#taskList').empty();
-    $('table').hide();
+    $('#tableWrapper').hide();
     $('#mediumLayoutDiv').show();
     $('#mediumLayoutDiv').empty();
     $('#mediumLayoutDiv').append(`<div id="showHideBtnDivMed">
@@ -202,8 +230,8 @@ function displayListMedium(tasks) {
                                         <option>Select option to sort...</option>
                                         <option value="taskName, ASC">Name (A-Z)</option>
                                         <option value="taskName, DESC">Name (Z-A)</option>
-                                        <option value="dueDate, ASC">Due Date (Oldest)</option>
-                                        <option value="dueDate, DESC">Due Date (Newest)</option>
+                                        <option value="dueDate, ASC">Due Date (Most Due)</option>
+                                        <option value="dueDate, DESC">Due Date (Least Due)</option>
                                         <option value="isComplete, ASC">Completed (No-Yes)</option>
                                         <option value="isComplete, DESC">Completed (Yes-No)</option>
                                         <option value="dateComplete, ASC">Date Completed (Oldest)</option>
@@ -214,7 +242,7 @@ function displayListMedium(tasks) {
                                  </div>`);
     for (let record of tasks) {
         let cleanRow = formatRow(record);
-        $('#mediumLayoutDiv').append(`
+        $("#mediumLayoutDiv").append(`
             <div class='taskMainDiv ${cleanRow.isComplete}Class'>
             <div class="editNameDiv">
             <img class="editBtn inputBtn"
@@ -222,21 +250,20 @@ function displayListMedium(tasks) {
             src="../../img/icons8-edit-64.png">Task: ${cleanRow.taskName}</div>
             <div class="nameDiv">
                 </div>
-                <div class=""><p class="descriptionText">${cleanRow.taskDescription}</p></div>
-                <div class="">Due Date: ${cleanRow.dueDate}</div>
+                <div class="descriptionDivSmall"><p class="descriptionText">Description: ${cleanRow.taskDescription}</p></div>
+                <div class="smallDateDiv">Due Date: ${cleanRow.dueDate}</div>
                 <div class="completeDiv">
+                <p id="completeLabel">Complete? ${cleanRow.isComplete}</p>
+                <div class="smallDateDiv">  Date Completed: ${cleanRow.dateComplete}</div>
+                </div>
                 <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
                 data-taskid="${record.id}"
                 src="../../img/icons8-done-64.png">
-                <p>Complete? ${cleanRow.isComplete}&nbsp;-&nbsp;</p>
-                    <div class="">  Date Completed: ${cleanRow.dateComplete}</div>
-                </div>
-                <div class="">Date Added: ${cleanRow.dateAdded}</div>
+                <div class="smallDateDiv">Date Added: ${cleanRow.dateAdded}</div>
                 <div id="buttonOuterDiv">
                     <div id="buttonDiv" data-taskid="${record.id}">
-                            <img class="deleteBtn inputBtn"
-                                data-taskid="${record.id}"
-                                src="../../img/icons8-trash-can-64.png">
+                            <button class="deleteBtn inputBtn"
+                                data-taskid="${record.id}">Remove Task</button>
                     </div>
                 </div>
             </div>
@@ -318,6 +345,11 @@ function setSort() {
     showTasks();
 }
 
+function setSortDue() {
+    sortToggle = !sortToggle;
+    showTasksDue();
+}
+
 function setEditInputs(row) {
     console.log('This is row: ', row);
     let cleanRow = formatRow(row[0]);
@@ -366,5 +398,35 @@ function checkScreenSize(response) {
         // Display mid sized table
     } else if ($(window).width() < 500) {
         // Display smallest table of info
+    }
+}
+
+function deleteConfirm(event){
+    swal({
+        title:"Confirm Delete?",
+        text: "This operation cannot be undone. Are you sure?",
+        buttons: {
+            cancel: true,
+            confirm: "Yes, Delete"
+        }
+    }).then( val => {
+        if(val) {
+            swal({
+                title: "Delete Successful!",
+                text: "Task has been removed from database.",
+                icon: "success"
+            });
+            deleteTask(event);
+        }
+    });
+}
+
+function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this;
+        const args = arguments;
+            clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => func.apply(context, args), delay);
     }
 }

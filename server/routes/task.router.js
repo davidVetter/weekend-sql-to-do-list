@@ -16,6 +16,17 @@ router.get('/:sortKey', (req, res) => {
         .then(result => res.send(result.rows));
 });
 
+router.get('/:sortKey/duedate', (req, res) => {
+    let sort = req.params.sortKey.toUpperCase();
+    console.log('This is sort dueDate: ', sort);
+    let query = `SELECT * FROM "tasks" ORDER BY "dueDate" DESC, "dateAdded", "id";`;
+    if (sort === 'ASC') { // uses ascending sort if ASC was passed or use DESC by default
+        query = `SELECT * FROM "tasks" ORDER BY "dueDate" ASC, "dateAdded", "id";`;
+    };
+    pool.query(query)
+        .then(result => res.send(result.rows));
+});
+
 // GET for getting a single row
 router.get('/:taskid/task', (req, res) => {
     let taskID = req.params.taskid;

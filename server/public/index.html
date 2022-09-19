@@ -5,30 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./vendors/jQuery.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="./scripts/client.js"></script>
     <link rel="stylesheet" href="./styles/style.css">
     <title>Document</title>
 </head>
 <body>
 <header>
-    <h1>Task List</h1>
-        <p class="mq" id="testElement">DID THIS SHOW UP???</p>
+    <h1 id="mainTitle">Task List</h1>
     </header>
+    <div id="mainDiv">
     <main id="mainSection">
         <div id="addFormDiv">
-            <h2 id="addEditHeading">Create New Task</h2>
+            <h2 class="addEditHeading">Create New Task</h2>
             <div id="addInputDiv">
                 Name: <input id="taskNameIn" type="text" placeholder="Task Name">
                 Description: <input id="taskDescriptionIn" type="text" placeholder="Description of task">
                 Due Date: <input id="dueDateIn" type="date">
             </div>
-            <button id="addBtn">Add Task</button>
-            <button id="cancelAddBtn">Cancel</button>
+            <button class="addFormBtn" id="addBtn">Add Task</button>
+            <button class="addFormBtn" id="cancelAddBtn">Cancel</button>
         </div>
         <div id="editDiv">
             <div id="editFormDiv">
-                <h2>Edit Task</h2>
-                <div id="editInputDiv"></div>
+                <h2 class="addEditHeading">Edit Task</h2>
+                <div id="editInputDiv">
                 Name: <input id="taskNameEdit" type="text" placeholder="Task Name">
                 Description: <input id="taskDescriptionEdit" type="text" placeholder="Description of task">
                 Task Complete? <select id="isCompleteEdit" required>
@@ -37,6 +38,7 @@
                                </select>
                 Date Completed: <input id="dateCompleteEdit" type="text">
                 Due Date: <input id="dueDateEdit" type="text">
+                </div>
             </div>
             <button id="editSubmitBtn">Edit Task</button>
             <button id="cancelEditBtn">Cancel Edit</button>
@@ -44,6 +46,8 @@
         <div id="mediumLayoutDiv">
 
         </div>
+        <div id="tableWrapper">
+            <div id="tableInnerWrapper">
         <table>
             <thead>
                 <tr id="tableHeadingRow">
@@ -54,13 +58,14 @@
                     <th id="dateCompletedHeading">Date Completed</th>
                     <th id="dateAddHeading"><div id="sortDateDiv"><p>Date Added</p><img class="sortIMG" src="./img/icons8-sort-50.png"></div></th>
                     <th id="addBtnHeading">
+                        <div id="addBtnSortSelectDiv">
                         <img title="Create New Task" class="showHideBtn" src="./img/icons8-create-50.png">
                         <select id="sortSelectOption">
                             <option>Select option to sort...</option>
                             <option value="taskName, ASC">Name (A-Z)</option>
                             <option value="taskName, DESC">Name (Z-A)</option>
-                            <option value="dueDate, ASC">Due Date (Oldest)</option>
-                            <option value="dueDate, DESC">Due Date (Newest)</option>
+                            <option value="dueDate, ASC">Due Date (Most Due)</option>
+                            <option value="dueDate, DESC">Due Date (Least Due)</option>
                             <option value="isComplete, ASC">Completed (No-Yes)</option>
                             <option value="isComplete, DESC">Completed (Yes-No)</option>
                             <option value="dateComplete, ASC">Date Completed (Oldest)</option>
@@ -68,6 +73,7 @@
                             <option value="dateAdded, ASC">Date Added (Oldest)</option>
                             <option value="dateAdded, DESC">Date Added (Newest)</option>
                         </select>
+                    </div>
                     </th>
                 </tr>
             </thead>
@@ -76,11 +82,14 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" id="totalTasks">PlaceHolder</td>
+                    <td colspan="6" id="totalTasks"></td>
                 </tr>
             </tfoot>
         </table>
+    </div>
+</div>
     </main>
+</div>
     <footer>
         <a target="_blank" href="https://icons8.com/icon/2o0oz6BtYr5E/edit">Edit</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br />
         <a target="_blank" href="https://icons8.com/icon/CEbRS8fles5K/trash-can">Trash Can</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a><br />

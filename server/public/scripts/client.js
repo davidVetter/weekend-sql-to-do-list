@@ -197,10 +197,10 @@ function displayList(tasks) {
                         </div>
                     </div>
                 </td>
-                <td class="botBorderCells">${cleanRow.dueDate}</td>
+                <td class="botBorderCells centerDateCell">${cleanRow.dueDate}</td>
                 <td class="completeCell botBorderCells">${cleanRow.isComplete}</td>
-                <td class="botBorderCells">${cleanRow.dateComplete}</td>
-                <td class="botBorderCells">${cleanRow.dateAdded}</td>
+                <td class="botBorderCells centerDateCell">${cleanRow.dateComplete}</td>
+                <td class="botBorderCells centerDateCell">${cleanRow.dateAdded}</td>
                 <td id="buttonCell">
                     <div id="buttonDiv">
                             <img class="markComplete inputBtn ${cleanRow.isComplete}Btn"
@@ -391,13 +391,13 @@ function displayAddTask() {
 
 function checkScreenSize(response) {
     if ($(window).width() > 960) {
+        // Display standard size
         displayList(response);
         $('#testElement').hide();
-        // Display standard size
     } else if ($(window).width() < 960) {
         $('#testElement').show();
-        displayListMedium(response);
         // Display mid sized table
+        displayListMedium(response);
     } else if ($(window).width() < 500) {
         // Display smallest table of info
     }

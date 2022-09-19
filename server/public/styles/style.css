@@ -86,6 +86,7 @@ input {
     border-radius: 7px;
     box-shadow: 0 0 3px black;
     margin-bottom: 5px;
+    padding: 5px;
 }
 
 .showHideBtn:hover {
@@ -152,6 +153,10 @@ tbody {
     box-sizing: border-box;
 }
 
+.centerDateCell, .nameCell {
+    text-align: center;
+}
+
 select {
     background-color: #3f84e5;
     box-shadow: 0 0 3px black;
@@ -178,6 +183,7 @@ td {
 
 .completeCell {
     width: 2vw;
+    text-align: center;
 }
 
 .sortIMG {

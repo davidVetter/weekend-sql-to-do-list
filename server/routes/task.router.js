@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express = require('express'); // import express
 const router = express.Router(); // initialize router
 
@@ -37,10 +36,8 @@ router.get('/:taskid/task', (req, res) => {
 });
 
 // GET that can search by any column and by ASC or DESC
-// THIS LOOKS LIKE IT MIGHT BE OPEN TO SQL INJECT
-// **FIX WOULD BE TO ADD A SERIES OF IF'S OR MAYBE CASE STATEMENT TO CONFIRM THE INCOMING IS
-// A VALID OPTION, IF NOT ONE OF THEM THEN REJECT AND SEND BACK ERROR**
-// *SAME THING FOR THE 'SORTKEY' - SIMILAR TO WHAT I DID IN THE FIRST TWO GETS*
+// It verifies that the passed params are only one of the ORDER BY options
+// otherwise an error is returned and the GET is not processed -- sanitization workaround
 router.get('/:sortBy/:sortKey/anySort', (req, res) => {
     const sortBy = `"${req.params.sortBy}"`;
     const sortKey = `${req.params.sortKey.toUpperCase()}`;

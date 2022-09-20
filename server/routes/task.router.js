@@ -43,10 +43,10 @@ router.get('/:sortBy/:sortKey/anySort', (req, res) => {
     const sortKey = `${req.params.sortKey.toUpperCase()}`;
     console.log('This is sortBy', sortBy);
     console.log('This is sortKey', sortKey);
-    if (!sortKey === 'ASC' || !sortKey === 'DESC') {
+    if (!sortKey === 'ASC' || !sortKey === 'DESC') { // check for proper sort order
         res.sendStatus(400);
         return;
-    }
+    } // checks for a valid column name to order by -- SQL inject protection
     if ( sortBy === '"taskName"' 
         || sortBy === '"dueDate"' 
         || sortBy === '"isComplete"' 
@@ -61,7 +61,7 @@ router.get('/:sortBy/:sortKey/anySort', (req, res) => {
         res.send(result.rows);
     }).catch(err => console.log('This is err in anySort:', err));
 } else {
-    res.sendStatus(400);
+    res.sendStatus(400); // return error if the params didn't pass validation
     return;
 }
 });

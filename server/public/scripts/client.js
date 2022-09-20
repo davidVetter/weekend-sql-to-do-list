@@ -1,20 +1,28 @@
 let sortToggle = true; // if true sort by descending order else by ascending order
-let taskToEdit;
-let readyToEdit = false;
+let taskToEdit; // keep track of the task id for various functions
+let readyToEdit = false; // Helps to make sure the correct task is edited
 
 $(onReady); // runs onReady function when page loads
 
+// Things that get done when page loads
 function onReady() {
-    console.log('jQuery connnected'); // test log to show this function is being called on load
+    //console.log('jQuery connnected');
     $('#editDiv').hide();
     $('#testElement').hide();
     $('#addFormDiv').hide();
+    // Display the tasks from DB
     showTasks();
+    // Call function to setup click events
     clickHandlers();
+    // This function will montior window resizes and call a function
+    // after the specified amount of time (150ms)
+    //  **The timer is reset on each window resize event to prevent numerous excess
+    //  calls to the server and database**
     $(window).resize(debounce(showTasks, 150));
 }
 
 function clickHandlers() {
+    // This is a series of on click events
     $('#mainSection').on('click', '.deleteBtn', deleteConfirm);
     $('#mainSection').on('click', '.markComplete', markTaskComplete);
     $('#mainSection').on('click', '.editBtn', editWhichTask);
@@ -25,11 +33,18 @@ function clickHandlers() {
     $('#cancelEditBtn').on('click', resetEdit);
     $('#sortDateDiv').on('click', setSort);
     $('#sortDueDiv').on('click', setSortDue);
+    // This handles the two select elements and makes them run functions on a user
+    // select of a child option element
     $('#sortSelectOption').change(showTasksAnySort);
     $('#mediumLayoutDiv').change('#sortSelectOption',showTasksAnySort);
     $('#mediumLayoutDiv').on('click', '.showHideBtn',displayAddTask);
 }
 
+// This function will perform a GET to return all rows from the db
+// The response is sent to a function that determines the screen size currently
+// and triggers the correct display function to perform on the returned data
+// The order of the returned data is toggled from ASC to DESC on each GET
+// *This is tied to the sort button in the DATE ADDED heading on the main display table*
 function showTasks() {
     let sort = 'DESC';
     if (!sortToggle) {
@@ -45,6 +60,11 @@ function showTasks() {
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
+// This function will perform a GET to return all rows from the db
+// The response is sent to a function that determines the screen size currently
+// and triggers the correct display function to perform on the returned data
+// The order of the returned data is toggled from ASC to DESC on each GET
+// *This is tied to the sort button in the DUE DATE heading on the main display table*
 function showTasksDue() {
     let sort = 'DESC';
     if (!sortToggle) {
@@ -60,10 +80,18 @@ function showTasksDue() {
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
+// This function will perform a GET based on the ORDER BY option from the select elements
+// Each version of the DOM has a sort select element
 function showTasksAnySort() {
+    // This check makes sure a valid option was selected
     if ($('#sortSelectOption').val() === 'Select option to sort...') {
-        return;
+        return; 
     }
+    // Split the value recieved at the comma
+    // intially added in value attribute for option element
+    // Pass the two values as params for the GET
+    // Response is sent to functions to determine screen size
+    // and display correctly
     let sortArray = $('#sortSelectOption').val().split(',');
     let sortBy = sortArray[0];
     let sort = sortArray[1];
@@ -79,6 +107,9 @@ function showTasksAnySort() {
     }).catch((error) => console.log('Error in showTasks', error));
 }
 
+// This function will return only the task that has been marked for edit
+// The info is then passed to a function that will use the data to fill
+// edit inputs at the top of the DOM
 function getEditInputs() {
     $.ajax({
         type: 'GET',
@@ -89,6 +120,8 @@ function getEditInputs() {
     })
 }
 
+// This function will handle the POST for adding a new task to the DB
+// Refresh display after getting response and clears the input fields
 function addTask() {
     $.ajax({
         type: 'POST',
@@ -105,6 +138,8 @@ function addTask() {
     }).catch((error) => console.log(error));
 }
 
+// This function will do a DELETE to delete a task from the db
+// The list of tasks is refreshed redisplayed
 function deleteTask(event) {
     const taskId = $(event.target).data('taskid');
     console.log(taskId);
@@ -117,6 +152,10 @@ function deleteTask(event) {
     }).catch((error) => console.log('Error in DELETE', error));
 }
 
+// This function is used to perform a PUT that will toggle if a task is complete or not
+// It checks for a certain class being present to determine which route to use
+// Class is applied to the task when the task is being displayed if task is complete or not
+// at that time
 function markTaskComplete(event) {
     const taskId = $(event.target).data('taskid');
     if ($(event.target).hasClass('YesBtn')) {
@@ -136,24 +175,31 @@ function markTaskComplete(event) {
 }
 }
 
+// This function will perform a PUT that can edit an existing task in the db
 function editTask() {
     const taskId = taskToEdit;
     const addObj = getEditInfo();
-    if (readyToEdit === false) {
+    if (readyToEdit === false) { // check that toggle is true, makes sure correct id is being used
         console.log('Error occurred while trying to edit');
         return;
     };
 
-    console.log('This is addObj in editTask: ', addObj);
+    //console.log('This is addObj in editTask: ', addObj);
+    // These next three checks handle the scenarios where mixed data exists
+    // in regards to a task being complete and a complete date
+
+    // If no complete selection on the DOM but a date complete entered
+    // then task is marked complete
     if(!addObj.isComplete && addObj.dateComplete) {
         addObj.isComplete = true;
     }
-
+    // if task is marked complete but no date complete, current date is filled to dateComplete
     if (addObj.isComplete && !addObj.dateComplete) {
         addObj.dateComplete = formatDate(new Date());
-        console.log("This is dateComplete: ", addObj.dateComplete);
+        //console.log("This is dateComplete: ", addObj.dateComplete);
     }
-
+    // if complete selection is ACTUALLY marked "No" from select element
+    // always clear dateComplete
     if (addObj.isComplete === 'false') {
         addObj.dateComplete = null;
     };
@@ -169,11 +215,16 @@ function editTask() {
             dueDate: addObj.dueDate
         }
     }).then(function() {
-        showTasks();
-        resetEdit();
+        showTasks(); // re-display tasks
+        resetEdit(); // clear edit inputs, hide them
     }).catch((error) => console.log(error));
 }
 
+// This function will build a table on the DOM will all the tasks and their info
+// This task format is used for screen 960px and above
+// Each task is it's own row
+// If this function is called, smaller screen layout is deleted and hidden
+// Data comes in as an array of objects
 function displayList(tasks) {
     $('#taskList').empty();
     $('#tableWrapper').show();
@@ -219,6 +270,10 @@ function displayList(tasks) {
     }
 }
 
+// This function is used to display the tasks as column of div elements
+// Used for screens less than 960px
+// Always empties and hides the table from bigger screens
+// Data comes in as an array of objects
 function displayListMedium(tasks) {
     $('#taskList').empty();
     $('#tableWrapper').hide();
@@ -275,7 +330,7 @@ function displayListMedium(tasks) {
 // It check if some values are present and inserts default
 // values if needed. It also formats dates
 function formatRow(obj) {
-    console.log('This is obj entering: ', obj);
+    //console.log('This is obj entering: ', obj);
     obj.dateAdded = formatDate(obj.dateAdded);
     // Converts true or false to Yes or No
     if (obj.isComplete) {
@@ -299,11 +354,15 @@ function formatRow(obj) {
     return obj;
 }
 
+// This function will take an date in full format with time and 
+// return it in a standard MM/DD/YYYY format
 function formatDate(dateDirty) {
     let niceDate = new Date(dateDirty);
     return niceDate.toLocaleDateString();
 }
 
+// This function grabs the info entered in the edit form
+// returns the edit data as an object
 function getEditInfo() {
     let editObj = {
         taskName: $('#taskNameEdit').val(),
@@ -316,6 +375,12 @@ function getEditInfo() {
     return editObj;
 }
 
+// This function will handle keeping track of which task is being edited
+// It first checks if the page is currently in edit, if so edit is canceled
+// It first strips all tasks of the class editSelect
+// Then it adds the editSelect to the selected task so that is the only task with class
+// Exposes the edit form
+// calls function to get the information from DB to populate the edit form fields
 function editWhichTask(event) {
     if (readyToEdit && $(event.target).data('taskid') === taskToEdit) {
         resetEdit();
@@ -329,6 +394,9 @@ function editWhichTask(event) {
     getEditInputs();
 }
 
+// This function will cancel an edit and reset page to proper no edit form
+// All edit form inputs get cleared, readyToEdit toggle is reset
+// All tasks have editSelect class removed if any have it
 function resetEdit() {
     $('#editDiv').hide();
     $('#taskNameEdit').val('');
@@ -340,21 +408,29 @@ function resetEdit() {
     $('.editBtn').removeClass('editSelect')
 }
 
+// This function toggles the sort toggle so each call flips between ASC and DESC
+// This is for the dateAdded GET for the sort button in table heading
 function setSort() {
     sortToggle = !sortToggle;
     showTasks();
 }
 
+// This function toggles the sort toggle so each call flips between ASC and DESC
+// This is for the dueDate GET for the sort button in table heading
 function setSortDue() {
     sortToggle = !sortToggle;
     showTasksDue();
 }
 
+// This function will populate the edit form inputs
+// It takes in the results of a GET for a single row
+// Calls a function that moves focus back to the top
+// of the page where the form is
 function setEditInputs(row) {
-    console.log('This is row: ', row);
+    //console.log('This is row: ', row);
     let cleanRow = formatRow(row[0]);
-    console.log('This is cleanRow: ', cleanRow);
-    console.log('This is taskName? ', cleanRow.taskName);
+    //console.log('This is cleanRow: ', cleanRow);
+    //console.log('This is taskName? ', cleanRow.taskName);
     $('#taskNameEdit').val(cleanRow.taskName);
     $('#taskDescriptionEdit').val(cleanRow.taskDescription);
     $('#isCompleteEdit').val(`${cleanRow.isComplete}`);
@@ -371,6 +447,8 @@ function setEditInputs(row) {
     scrollToTop();
 }
 
+// This function will empty the inputs in the add task form
+// Runs a toggle function to show/hide the add form
 function clearAddInputs() {
     $('#taskNameIn').val('');
     $('#taskDescriptionIn').val('');
@@ -378,6 +456,9 @@ function clearAddInputs() {
     displayAddTask();
 }
 
+// This function will toggle if add task form is displayed or not depending
+// on the current state
+// Will move focus back to top of page if needed
 function displayAddTask() {
     if ($('#addFormDiv').is(':visible')) {
         $('#addFormDiv').hide();
@@ -389,13 +470,15 @@ function displayAddTask() {
     };
 }
 
+// This function will call a function based on the current size of a the screen
+// Used to trigger the different layout functions as the screen size changes
 function checkScreenSize(response) {
     if ($(window).width() > 960) {
         // Display standard size
         displayList(response);
-        $('#testElement').hide();
+        //$('#testElement').hide();
     } else if ($(window).width() < 960) {
-        $('#testElement').show();
+        //$('#testElement').show();
         // Display mid sized table
         displayListMedium(response);
     } else if ($(window).width() < 500) {
@@ -403,6 +486,8 @@ function checkScreenSize(response) {
     }
 }
 
+// This function is a SWEET ALERTS alert to confirm a delete is wanted
+// Sweet Alerts is a library used on this project
 function deleteConfirm(event){
     swal({
         title:"Confirm Delete?",
@@ -423,6 +508,14 @@ function deleteConfirm(event){
     });
 }
 
+// This function will help control the number of times the server is called on window
+// resizing. Certain browsers will keep triggering window resize events as a user drags
+// the window sending many unwanted request.
+// The function that actually should be called is put on a setTimeout that will be resest
+// each time the window resize event is triggerred and then after a specificied amount of time
+// (150ms) if no more events were fired, the function is called
+// CREDIT TO GEEKSFORGEEKS.COM for most of the code used in this function
+// https://www.geeksforgeeks.org/debouncing-in-javascript/
 function debounce(func, delay) {
     let debounceTimer;
     return function() {
@@ -433,6 +526,9 @@ function debounce(func, delay) {
     }
 }
 
+// This function will move focus back to the top of the screen
+// Used with add task and edit task buttons to the user will be brought
+// to the form if they are scrolled down on the page
 function scrollToTop() {
     $(window).scrollTop(0);
 }

@@ -43,13 +43,18 @@ router.get('/:taskid/task', (req, res) => {
 // *SAME THING FOR THE 'SORTKEY' - SIMILAR TO WHAT I DID IN THE FIRST TWO GETS*
 router.get('/:sortBy/:sortKey/anySort', (req, res) => {
     const sortBy = `"${req.params.sortBy}"`;
-    const sortKey = req.params.sortKey.toUpperCase();
+    const sortKey = `${req.params.sortKey.toUpperCase()}`;
     console.log('This is sortBy', sortBy);
-    if ( sortBy === 'taskName' 
-        || sortBy === 'dueDate' 
-        || sortBy === 'isComplete' 
-        || sortBy === 'dateAdded' 
-        || sortBy === 'dateComplete') {
+    console.log('This is sortKey', sortKey);
+    if (!sortKey === 'ASC' || !sortKey === 'DESC') {
+        res.sendStatus(400);
+        return;
+    }
+    if ( sortBy === '"taskName"' 
+        || sortBy === '"dueDate"' 
+        || sortBy === '"isComplete"' 
+        || sortBy === `"dateComplete"` 
+        || sortBy === '"dateAdded"') {
     let query = (`SELECT * FROM "tasks" ORDER BY LOWER(` + sortBy + `) ` + sortKey + `;`);
     if (sortBy === `"dueDate"` || sortBy === `"dateComplete"` || sortBy === `"dateAdded"` || sortBy === `"isComplete"`) {
         query = (`SELECT * FROM "tasks" ORDER BY ` + sortBy + ' ' + sortKey + `;`);
@@ -57,7 +62,7 @@ router.get('/:sortBy/:sortKey/anySort', (req, res) => {
     pool.query(query).then(result => {
         console.log(result.rows);
         res.send(result.rows);
-    });
+    }).catch(err => console.log('This is err in anySort:', err));
 } else {
     res.sendStatus(400);
     return;

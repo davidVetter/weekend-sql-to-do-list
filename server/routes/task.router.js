@@ -16,6 +16,7 @@ router.get('/:sortKey', (req, res) => {
         .then(result => res.send(result.rows));
 });
 
+// GET to do a toggling sort by due date
 router.get('/:sortKey/duedate', (req, res) => {
     let sort = req.params.sortKey.toUpperCase();
     console.log('This is sort dueDate: ', sort);
@@ -35,10 +36,20 @@ router.get('/:taskid/task', (req, res) => {
         .then(result => res.send(result.rows));
 });
 
+// GET that can search by any column and by ASC or DESC
+// THIS LOOKS LIKE IT MIGHT BE OPEN TO SQL INJECT
+// **FIX WOULD BE TO ADD A SERIES OF IF'S OR MAYBE CASE STATEMENT TO CONFIRM THE INCOMING IS
+// A VALID OPTION, IF NOT ONE OF THEM THEN REJECT AND SEND BACK ERROR**
+// *SAME THING FOR THE 'SORTKEY' - SIMILAR TO WHAT I DID IN THE FIRST TWO GETS*
 router.get('/:sortBy/:sortKey/anySort', (req, res) => {
     const sortBy = `"${req.params.sortBy}"`;
     const sortKey = req.params.sortKey.toUpperCase();
     console.log('This is sortBy', sortBy);
+    if ( sortBy === 'taskName' 
+        || sortBy === 'dueDate' 
+        || sortBy === 'isComplete' 
+        || sortBy === 'dateAdded' 
+        || sortBy === 'dateComplete') {
     let query = (`SELECT * FROM "tasks" ORDER BY LOWER(` + sortBy + `) ` + sortKey + `;`);
     if (sortBy === `"dueDate"` || sortBy === `"dateComplete"` || sortBy === `"dateAdded"` || sortBy === `"isComplete"`) {
         query = (`SELECT * FROM "tasks" ORDER BY ` + sortBy + ' ' + sortKey + `;`);
@@ -47,6 +58,10 @@ router.get('/:sortBy/:sortKey/anySort', (req, res) => {
         console.log(result.rows);
         res.send(result.rows);
     });
+} else {
+    res.sendStatus(400);
+    return;
+}
 });
 
 // POST adding a new task to DB

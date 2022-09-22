@@ -18,11 +18,6 @@ This is a basic to-do list application. It helps keep track of tasks that need t
 <img src='./server/public/img/Screen Shot 2022-09-19 at 8.09.45 AM.jpg'>
 <img src='./server/public/img/Screen Shot 2022-09-19 at 8.09.57 AM.jpg'>
 <img src='./server/public/img/Screen Shot 2022-09-19 at 8.10.20 AM.jpg'>
-<img src='./server/public/img/Screen Shot 2022-09-19 at 8.10.28 AM.jpg'>
-<img src='./server/public/img/Screen Shot 2022-09-19 at 8.10.39 AM.jpg'>
-<img src='./server/public/img/Screen Shot 2022-09-19 at 8.10.50 AM.jpg'>
-<img src='./server/public/img/Screen Shot 2022-09-19 at 8.11.03 AM.jpg'>
-<img src='./server/public/img/Screen Shot 2022-09-19 at 8.11.12 AM.jpg'>
 
 ### Prerequisites
 
@@ -41,7 +36,6 @@ Link to software that is required to install the app (e.g. node).
 6. Open 'localhost:5000' in a modern browser (Chrome, Firefox preferred)
 
 ## Usage
-How does someone use this application? Tell a user story here.
 
 1. If database is setup and app running in browser, start adding tasks!
 2. Use the Add Button to create new taks.
